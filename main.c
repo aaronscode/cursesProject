@@ -10,5 +10,8 @@
 
 int main(int argc, char *argv[])
 {
- 	printf("Hello, World!");
+	bool running = TRUE;
+ 	printf("Hello, World!\n");
+
+	return 0;
 }
