@@ -15,11 +15,36 @@
 #define Herp "Herp"
 #endif
 
+void update();
+void render();
+void pause();
+
 int main(int argc, char *argv[])
 {
 	bool running = TRUE;
- 	printf("Hello, World!\n");
-	// this is a change to the file
+
+	while(running)
+	{
+		update();
+		render();
+		pause();
+	}
 
 	return 0;
+}
+
+void update()
+{
+
+}
+
+void render() 
+{
+
+}
+
+void pause() 
+{
+	napms(500);
+ 	printf("Hello, World!\n");
 }
