@@ -8,19 +8,17 @@
 
 #include <stdio.h>
 #include <curses.h>
+#include "update.h"
 
 #ifdef _WIN32		// defs to check OS
-#define Herp "Derp"     // may put in .h file later to reduce clutter
 #endif
 #ifdef __linux__
-#define Herp "Herp"
 #endif
 
 #define MAX_FPS 50
 #define MSEC_IN_SEC 1000
 #define DELAY (MSEC_IN_SEC / MAX_FPS)
 #define TICS_PER_SEC MAX_FPS
-void update();
 void render();
 void pause();
 
