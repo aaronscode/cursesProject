@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <curses.h>
+#include "globals.h"
 #include "update.h"
 
 #ifdef _WIN32		// defs to check OS
@@ -19,12 +20,13 @@
 #define MSEC_IN_SEC 1000
 #define DELAY (MSEC_IN_SEC / MAX_FPS)
 #define TICS_PER_SEC MAX_FPS
+void loadResources();
 void render();
 void pause();
 
+bool notReadyToQuit();
 int getKey();
 
-bool running = TRUE;
 int tick = 0;
 
 int main(int argc, char *argv[])
@@ -43,7 +45,9 @@ int main(int argc, char *argv[])
 	noecho(); // turn off key echoing
 	keypad(w, TRUE); // allow getch() to detect non-character key presses
 
-	while(running)
+	loadResources();
+
+	while(notReadyToQuit())
 	{
 		update();
 		render();
@@ -56,25 +60,23 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	//perform cleanup
+	delwin(w);
+    	endwin();
+   	refresh();
+
 	return 0;
 }
 
-void update()
-{
-	int key = 0;
-
-	key = getKey();
-	if(key == 27)
-	{
-		running = FALSE;
-	}
+void loadResources(){
+	printw("Loading Resources . . .");
 }
 
 void render() 
 {
 	if(tick == 0)
 	{
- 		printw("Hello, World!\n", );
+ 		printw("Hello, World!\n");
 	}
 
 	refresh(); // call curses's refresh funct to update screen
@@ -88,4 +90,15 @@ void pause()
 int getKey(){
 	int key = getch();
 	return key;
+}
+
+bool notReadyToQuit()
+{
+	if(state)
+	{
+		return TRUE;
+	} else 
+	{
+		return FALSE;
+	}
 }
