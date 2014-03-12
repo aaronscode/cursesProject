@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <curses.h>
-#include "globals.h"
+#include "state.h"
 #include "update.h"
 
 #ifdef _WIN32		// defs to check OS

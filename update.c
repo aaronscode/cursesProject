@@ -4,6 +4,6 @@ void update() {
 	key = getKey();
 	if(key == 27)
 	{
-		state = 0;
+		setState(QUIT);
 	} 
 }

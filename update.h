@@ -1,7 +1,7 @@
 #ifndef __UPDATE__
 #define __UPDATE__
 
-#include "globals.h"
+#include "state.h"
 
 void update();
 
