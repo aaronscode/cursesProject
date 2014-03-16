@@ -7,5 +7,5 @@
 int getState();
 int getPrevState();
 int setState(int newState);
-#include "globals.c"
+#include "state.c"
 #endif

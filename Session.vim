@@ -34,9 +34,9 @@ vmap [% [%m'gv``
 vmap ]% ]%m'gv``
 vmap a% [%v]%
 nmap gx <Plug>NetrwBrowseX
-nnoremap <C-F4> c
-nnoremap <C-Tab> w
 nmap <S-Insert> "+gP
+nnoremap <C-Tab> w
+nnoremap <C-F4> c
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 snoremap <Plug>selectToInsert d<BS>
 map <F5> :!make test 
@@ -92,7 +92,7 @@ set statusline=%-3.3n\ %f\ %h%m%r%w[%{strlen(&ft)?&ft:'none'},%{strlen(&fenc)?&f
 set viminfo='100,<50,s10,h,rA:,rB:,n$VIM/_viminfo
 set visualbell
 set whichwrap=b,s,<,>,[,]
-set window=34
+set window=33
 let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
 let v:this_session=expand("<sfile>:p")
 silent only
@@ -101,17 +101,17 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +12 main.c
+badd +30 main.c
 badd +11 \Users\Aaron\CIS1\cursesProject\notes.txt
 badd +9 \Users\Aaron\CIS1\cursesProject\Makefile
 badd +5 mainMenu.h
 badd +9 update.h
 badd +7 update.c
-badd +1 status.h
-badd +1 status.c
 badd +1 mainMenu.c
+badd +10 state.h
+badd +1 state.c
 args main.c
-set lines=35 columns=151
+set lines=34 columns=149
 winpos -8 -8
 edit main.c
 set splitbelow splitright
@@ -123,8 +123,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 84 + 75) / 151)
-exe 'vert 2resize ' . ((&columns * 66 + 75) / 151)
+exe 'vert 1resize ' . ((&columns * 83 + 74) / 149)
+exe 'vert 2resize ' . ((&columns * 65 + 74) / 149)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -228,12 +228,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 12 - ((11 * winheight(0) + 16) / 33)
+let s:l = 30 - ((15 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-12
-normal! 0
+30
+normal! 02|
 wincmd w
 argglobal
 edit \Users\Aaron\CIS1\cursesProject\notes.txt
@@ -339,15 +339,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((0 * winheight(0) + 16) / 33)
+let s:l = 18 - ((0 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 18
 normal! 050|
 wincmd w
-exe 'vert 1resize ' . ((&columns * 84 + 75) / 151)
-exe 'vert 2resize ' . ((&columns * 66 + 75) / 151)
+exe 'vert 1resize ' . ((&columns * 83 + 74) / 149)
+exe 'vert 2resize ' . ((&columns * 65 + 74) / 149)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf
