@@ -9,6 +9,8 @@ int main(){
 	}
 }
 
+in pause - napms(n) - from curses, sleep n ms.
+
 * These two line make it so that getch() doesn't need to wait 
 * for a character to be entered for getch() to return.
 * This allows the game to update and render even when there is no input
@@ -21,6 +23,8 @@ noecho(); // turn off key echoing
 keypad(w, TRUE); // allow getch() to detect non-character key presses
 
 refresh() - redraws screen with any updates
+to increase performance, curses draws to an offscreen buffer
+then updates the screen all at once when refresh is called
 
 addstr() - prints specified string
 printw() - prints specified string WITH formatting (printf)
