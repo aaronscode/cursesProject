@@ -5,8 +5,10 @@ all:
 	gcc -o cursesProject.exe main.c -lpdcurses
 
 unix:
-	rm cursesProject
 	gcc -o cursesProject main.c -lncurses
 
 test:
-	cursesProject
+	./cursesProject
+
+clean:
+	rm cursesProject

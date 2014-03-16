@@ -27,6 +27,10 @@ printw() - prints specified string WITH formatting (printf)
 
 int mvaddstr(int y, int x, const char *str);
 mvprintw(int Line, int Column, char *Format, [Argument ...]);
+
+charachter range is gonna have to be between 33 and 126
+windows has extended ascii character set (codepage 437),
+but linux is limited to utf-8
 =========================================
 = mainMenu.h                            =
 =========================================
