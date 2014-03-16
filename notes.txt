@@ -1,0 +1,51 @@
+=========================================
+= main.c                                =
+=========================================
+int main(){
+	while(running){
+		update();
+		render();
+		pause();
+	}
+}
+
+* These two line make it so that getch() doesn't need to wait 
+* for a character to be entered for getch() to return.
+* This allows the game to update and render even when there is no input
+* Also put as: call getch() without blocking
+cbreak(); // put terminal in c break mode
+nodelay(w, TRUE); // don't wait for enter to read char
+getch() will return ERR if no key has been pressed
+
+noecho(); // turn off key echoing
+keypad(w, TRUE); // allow getch() to detect non-character key presses
+
+refresh() - redraws screen with any updates
+
+addstr() - prints specified string
+printw() - prints specified string WITH formatting (printf)
+
+int mvaddstr(int y, int x, const char *str);
+mvprintw(int Line, int Column, char *Format, [Argument ...]);
+=========================================
+= mainMenu.h                            =
+=========================================
+#stateID = 1
+	-recursive findMax() // might not be necessary
+
+=========================================
+= update.h                              =
+=========================================
+
+
+=========================================
+= status.h                              =
+=========================================
+StateID's:
+	0   quit
+	1   mainMenu
+	2   
+
+=========================================
+= mapFileParser.h                       =
+=========================================
