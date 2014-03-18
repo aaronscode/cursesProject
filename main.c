@@ -1,6 +1,11 @@
 /* =============================================================================
  * Aaron Gross
- * cursesProject.c
+ * cursesProject
+ * renamed SpankWagon, my friend's idea.
+ *
+ * Credits: 
+ * Programming - Aaron Gross
+ * Story/Comic relief - Jason Pepper, Jack Hafer
  * 3/4/14
  * V 0.2
  * =============================================================================

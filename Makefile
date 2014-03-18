@@ -1,14 +1,14 @@
 CFLAGS=-Wall -g
 
 all:
-	del cursesProject.exe
-	gcc -o cursesProject.exe main.c -lpdcurses
+	del SpankWagon.exe
+	gcc -o SpankWagon.exe main.c -lpdcurses
 
 unix:
-	gcc -o cursesProject main.c -lncurses
+	gcc -o SpankWagon main.c -lncurses
 
 test:
-	./cursesProject
+	./SpankWagon
 
 clean:
-	rm cursesProject
+	rm SpankWagon
