@@ -15,6 +15,7 @@
 #include <curses.h>
 #include "state.h"
 #include "update.h"
+#include "mainMenu.h"
 
 #ifdef _WIN32		// defs to check OS
 #endif
@@ -25,18 +26,26 @@
 #define MSEC_IN_SEC 1000
 #define DELAY (MSEC_IN_SEC / MAX_FPS)
 #define TICS_PER_SEC MAX_FPS
+#define SCREEN_WIDTH 80
+#define SCREEN_HEIGHT 25
+
+void initialize();
 void loadResources();
 void render();
 void pause();
+void cleanup();
 
 bool notReadyToQuit();
+
 int getKey();
 
 int tick = 0;
 
+WINDOW *w;
+
 int main(int argc, char *argv[])
 {
-	WINDOW *w = initscr(); // init a curses window
+	w = initscr(); // init a curses window
 
 	/*
 	 * These two line make it so that getch() doesn't need to wait 
@@ -50,7 +59,7 @@ int main(int argc, char *argv[])
 	noecho(); // turn off key echoing
 	keypad(w, TRUE); // allow getch() to detect non-character key presses
 
-	loadResources();
+	initialize();
 
 	while(notReadyToQuit())
 	{
@@ -65,16 +74,24 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	//perform cleanup
-	delwin(w);
-    	endwin();
-   	refresh();
+	cleanup();
 
 	return 0;
 }
 
-void loadResources(){
-	printw("Loading Resources . . .");
+void initialize()
+{
+	loadResources();
+	initMenu(4, SCREEN_WIDTH, SCREEN_HEIGHT);
+	setState(MAIN_MENU);
+}
+
+void loadResources()
+{
+	printw("Loading Resources . . .\n");
+	refresh();
+	// TODO load resources when the actually exist.
+	napms(500);
 }
 
 void render() 
@@ -92,9 +109,12 @@ void pause()
 	napms(DELAY); // from curses.h, sleeps for n milliseconds
 }
 
-int getKey(){
-	int key = getch();
-	return key;
+void cleanup()
+{
+	cleanupMenu();
+	delwin(w);
+    	endwin();
+   	refresh();
 }
 
 bool notReadyToQuit()
@@ -106,4 +126,9 @@ bool notReadyToQuit()
 	{
 		return FALSE;
 	}
+}
+
+int getKey(){
+	int key = getch();
+	return key;
 }

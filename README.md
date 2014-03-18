@@ -15,5 +15,5 @@ There are two ways to install this for windows, the easy way, and the hard way. 
 
 ##Credits
 Programming - Aaron G.
-
+</br>
 Name - Jason P.
