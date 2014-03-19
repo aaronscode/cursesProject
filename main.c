@@ -41,6 +41,13 @@ int getKey();
 
 int tick = 0;
 
+char titleBanner[] = {"\
+SSSSS PPPPP   A   W     W   A   N   N K  K W     W   A    GGG   OOO  N   N\
+S     P   P  A A  W  W  W  A A  NN  N K K  W  W  W  A A  G     O   O NN  N\
+SSSSS PPPPP A   A W W W W A   A N N N KK   W W W W A   A G  G  O   O N N N\
+    S P     AAAAA W W W W AAAAA N N N K K  W W W W AAAAA G   G O   O N N N\
+SSSSS P     A   A WW   WW A   A N  NN K  K WW   WW A   A GGGG   OOO  N  NN"};
+
 WINDOW *w;
 
 int main(int argc, char *argv[])
@@ -81,7 +88,9 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
+	curs_set(0);
 	loadResources();
+	initTitle(74, 5, titleBanner);
 	initMenu(4, SCREEN_WIDTH, SCREEN_HEIGHT);
 	setState(MAIN_MENU);
 }
@@ -96,11 +105,15 @@ void loadResources()
 
 void render() 
 {
+	clear();
+	/*
 	if(tick == 0)
 	{
  		printw("Hello, World!\n");
 	}
 
+	*/
+	renderMainMenu();
 	refresh(); // call curses's refresh funct to update screen
 }
 
