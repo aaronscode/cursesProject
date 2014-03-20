@@ -1,5 +1,6 @@
 int state = 1;
 int prevState =0;
+int substate = 0;
 
 int getState()
 {

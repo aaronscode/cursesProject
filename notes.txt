@@ -47,12 +47,18 @@ but linux is limited to utf-8
 
 
 =========================================
-= status.h                              =
+= state.h                              =
 =========================================
 StateID's:
 	0   quit
 	1   mainMenu
-	2   
+	2   game
+	3   instructions
+	4   options
+	5   battle
+	6   shop
+	7   inventory
+	8   nameing?
 
 =========================================
 = mapFileParser.h                       =

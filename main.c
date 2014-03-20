@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <curses.h>
+#include "definitions.h"
 #include "state.h"
 #include "update.h"
 #include "mainMenu.h"
@@ -21,13 +22,6 @@
 #endif
 #ifdef __linux__
 #endif
-
-#define MAX_FPS 50
-#define MSEC_IN_SEC 1000
-#define DELAY (MSEC_IN_SEC / MAX_FPS)
-#define TICS_PER_SEC MAX_FPS
-#define SCREEN_WIDTH 80
-#define SCREEN_HEIGHT 25
 
 void initialize();
 void loadResources();
@@ -42,11 +36,11 @@ int getKey();
 int tick = 0;
 
 char titleBanner[] = {"\
-SSSSS PPPPP   A   W     W   A   N   N K  K W     W   A    GGG   OOO  N   N\
-S     P   P  A A  W  W  W  A A  NN  N K K  W  W  W  A A  G     O   O NN  N\
-SSSSS PPPPP A   A W W W W A   A N N N KK   W W W W A   A G  G  O   O N N N\
-    S P     AAAAA W W W W AAAAA N N N K K  W W W W AAAAA G   G O   O N N N\
-SSSSS P     A   A WW   WW A   A N  NN K  K WW   WW A   A GGGG   OOO  N  NN"};
+SSSSS PPPPP   A   N   N K  K W     W   A    GGG   OOO  N   N\
+S     P   P  A A  NN  N K K  W  W  W  A A  G     O   O NN  N\
+SSSSS PPPPP A   A N N N KK   W W W W A   A G  G  O   O N N N\
+    S P     AAAAA N N N K K  W W W W AAAAA G   G O   O N N N\
+SSSSS P     A   A N  NN K  K WW   WW A   A GGGG   OOO  N  NN"};
 
 WINDOW *w;
 
@@ -90,8 +84,12 @@ void initialize()
 {
 	curs_set(0);
 	loadResources();
-	initTitle(74, 5, titleBanner);
 	initMenu(4, SCREEN_WIDTH, SCREEN_HEIGHT);
+	initTitle(60, 5, titleBanner);
+	initMenuChoice(GAME, "Play Game");
+	initMenuChoice(INSTRUCTIONS, "Instructions");
+	initMenuChoice(OPTIONS, "Options");
+	initMenuChoice(QUIT, "Quit");
 	setState(MAIN_MENU);
 }
 
@@ -139,9 +137,4 @@ bool notReadyToQuit()
 	{
 		return FALSE;
 	}
-}
-
-int getKey(){
-	int key = getch();
-	return key;
 }

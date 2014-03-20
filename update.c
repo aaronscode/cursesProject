@@ -14,7 +14,16 @@ void update() {
 			switch(getState())
 			{
 				case MAIN_MENU:
-					updateMainMenu();
+					updateMainMenu(key);
+					break;
+				case GAME:
+					updateGame(key);
+					break;
+				case INSTRUCTIONS:
+					updateInstructions(key);
+					break;
+				case OPTIONS:
+					updateOptions(key);
 					break;
 				default:
 					break;
@@ -28,4 +37,9 @@ void update() {
 	{
 		setState(QUIT);
 	} 
+}
+
+int getKey(){
+	int key = getch();
+	return key;
 }

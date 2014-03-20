@@ -1,0 +1,6 @@
+#define MAX_FPS 50
+#define MSEC_IN_SEC 1000
+#define DELAY (MSEC_IN_SEC / MAX_FPS)
+#define TICS_PER_SEC MAX_FPS
+#define SCREEN_WIDTH 80
+#define SCREEN_HEIGHT 25
