@@ -104,14 +104,23 @@ void loadResources()
 void render() 
 {
 	clear();
-	/*
-	if(tick == 0)
+	switch(getState())
 	{
- 		printw("Hello, World!\n");
+		case MAIN_MENU:
+			renderMainMenu();
+			break;
+		case GAME:
+			renderGame();
+			break;
+		case INSTRUCTIONS:
+			renderInstructions();
+			break;
+		case OPTIONS:
+			renderOptions();
+			break;
+		default:
+			break;
 	}
-
-	*/
-	renderMainMenu();
 	refresh(); // call curses's refresh funct to update screen
 }
 

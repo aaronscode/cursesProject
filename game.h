@@ -5,6 +5,7 @@
 #include "state.h"
 
 void updateGame(int key);
+void renderGame();
 
 #include "game.c"
 

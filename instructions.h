@@ -5,6 +5,7 @@
 #include "state.h"
 
 void updateInstructions(int key);
+void renderOptions();
 
 #include "instructions.c"
 

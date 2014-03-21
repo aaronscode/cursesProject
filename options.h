@@ -5,6 +5,7 @@
 #include "state.h"
 
 void updateOptions(int key);
+void renderOptions();
 
 #include "options.c"
 

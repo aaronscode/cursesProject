@@ -10,7 +10,7 @@ void update() {
 	{
 		key = getKey();
 		if(key != ERR){
-			inputCoolCount = TICKS_TO_COOLDOWN;
+			//inputCoolCount = TICKS_TO_COOLDOWN;
 			switch(getState())
 			{
 				case MAIN_MENU:

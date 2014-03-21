@@ -1,4 +1,9 @@
 void updateGame(int key)
 {
-	setState(QUIT);
+
+}
+
+void renderGame()
+{
+	mvprintw(0, 0, "Game State");
 }

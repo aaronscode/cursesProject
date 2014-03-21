@@ -1,4 +1,9 @@
-void updateOptions(key)
+void updateOptions(int key)
 {
-	setState(QUIT);
+	mvprintw(0,0, "Options State");
+}
+
+void renderOptions()
+{
+	mvprintw(0, 0, "Options State");
 }

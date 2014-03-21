@@ -77,7 +77,7 @@ void updateMainMenu(int key)
 			}
 			break;
 		case '\n':
-			setState(mc[topOptPos-cursorPos].stateID);
+			setState(mc[cursorPos - topOptPos].stateID);
 		default:
 			break;
 	}
@@ -120,6 +120,7 @@ void renderMainMenu()
 		}
 		mvaddstr(y, leftEdgePos, mc[i].text);
 	}
+	mvprintw(24,0, "%d",getState()); 
 }
 
 void cleanupMenu()
