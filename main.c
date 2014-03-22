@@ -84,7 +84,7 @@ void initialize()
 {
 	curs_set(0);
 	loadResources();
-	initMenu(4, SCREEN_WIDTH, SCREEN_HEIGHT);
+	initMenu(4);
 	initTitle(60, 5, titleBanner);
 	initMenuChoice(GAME, "Play Game");
 	initMenuChoice(INSTRUCTIONS, "Instructions");

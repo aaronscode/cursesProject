@@ -6,4 +6,5 @@ void updateOptions(int key)
 void renderOptions()
 {
 	mvprintw(0, 0, "Options State");
+	mvprintw(1, 0, "(You are experienceing the illsion of free will)");
 }
