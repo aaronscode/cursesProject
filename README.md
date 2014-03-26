@@ -1,4 +1,7 @@
 #cursesProject a.k.a. SpankWagon
+
+![](https://raw.githubusercontent.com/nocookies92/cursesProject/master/Spankwagon1.png)
+
 This is an attempt to create a character-tile based game using the curses library.
 
 Yes, it really is called SpankWagon. The credit goes to my friend, a journalism major, who I asked to help me come up with a name and story.
