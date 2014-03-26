@@ -1,36 +1,41 @@
-#define TICKS_TO_COOLDOWN 5
+#define TICKS_TO_COOLDOWN 3
 
-int inputCoolCount;
+int inputCoolCount = 0;
 
 int key = 0;
 
 void update() {
 
-	if( inputCoolCount == 0 )
-	{
-		key = getKey();
-		if(key != ERR){
-			//inputCoolCount = TICKS_TO_COOLDOWN;
-			switch(getState())
-			{
-				case MAIN_MENU:
-					updateMainMenu(key);
-					break;
-				case GAME:
-					updateGame(key);
-					break;
-				case INSTRUCTIONS:
-					updateInstructions(key);
-					break;
-				case OPTIONS:
-					updateOptions(key);
-					break;
-				default:
-					break;
-			}
+	key = getKey();
+	if(key != ERR){
+		if(inputCoolCount == 0)
+		{
+			inputCoolCount = TICKS_TO_COOLDOWN;
+		} else {
+			key = ERR;
 		}
-	} else {
-		inputCoolCount--;
+
+		switch(getState())
+		{
+			case MAIN_MENU:
+				updateMainMenu(key);
+				break;
+			case GAME:
+				updateGame(key);
+				break;
+			case INSTRUCTIONS:
+				updateInstructions(key);
+				break;
+			case OPTIONS:
+				updateOptions(key);
+				break;
+			default:
+				break;
+		}
+	} 
+	if(inputCoolCount > 0)
+	{
+			inputCoolCount--;
 	}
 
 	if(key == 27)
