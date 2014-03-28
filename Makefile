@@ -8,7 +8,7 @@ unix:
 	gcc -o SpankWagon main.c -lncurses
 
 test:
-	./SpankWagon
+	SpankWagon
 
 clean:
 	rm SpankWagon

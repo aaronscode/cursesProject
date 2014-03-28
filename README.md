@@ -14,9 +14,9 @@ Install the ncurses library (`sudo apt-get install ncurses-dev`).
 Run `make unix`. The compiled program can be run by the command `./SpankWagon`
 
 ###Windows
-There are two ways to install this for windows, the easy way, and the hard way. The easy way is to download the .exe from the /bin folder. The hard way is to compile it yourself. I compiled it using MinGW gcc. You also need to install the pdcurses library using the MinGW package installer. Then run `make` on the command line.
+The hard way is to compile it yourself. I compiled it using MinGW gcc. You also need to install the pdcurses library using the MinGW package installer. Then run `make` on the command line.
 
 ##Credits
 Programming - Aaron G.
-</br>
+
 Name - Jason P.
