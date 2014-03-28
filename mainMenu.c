@@ -84,9 +84,14 @@ void updateMainMenu(int key)
 			}
 			break;
 		case '\n':
+		case 'z':
 			// if enter pressed, set the state of the choice that
 			// was selected
 			setState(mc[cursorPos - topOptPos].stateID);
+			break;
+		case 27:
+			setState(QUIT);
+			break;
 		default:
 			break;
 	}

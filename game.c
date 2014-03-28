@@ -17,6 +17,9 @@ void updateGame(int key)
 		case KEY_RIGHT:
 			if(x < (SCREEN_WIDTH - 1)) x++;
 			break;
+		case 27:
+			setState(MAIN_MENU);
+			break;
 		default:
 			break;
 	}

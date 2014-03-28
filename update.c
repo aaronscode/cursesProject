@@ -1,4 +1,4 @@
-#define TICKS_TO_COOLDOWN 3
+#define TICKS_TO_COOLDOWN 4
 
 int inputCoolCount = 0;
 
@@ -33,15 +33,11 @@ void update() {
 				break;
 		}
 	} 
+
 	if(inputCoolCount > 0)
 	{
 			inputCoolCount--;
 	}
-
-	if(key == 27)
-	{
-		setState(QUIT);
-	} 
 }
 
 int getKey(){

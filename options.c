@@ -1,6 +1,16 @@
 void updateOptions(int key)
 {
-	mvprintw(0,0, "Options State");
+	switch(key)
+	{
+		case 'x':
+			setState(getPrevState());
+			break;
+		case 27:
+			setState(QUIT);
+			break;
+		default:
+			break;
+	}
 }
 
 void renderOptions()

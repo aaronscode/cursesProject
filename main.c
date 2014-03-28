@@ -46,20 +46,6 @@ WINDOW *w;
 
 int main(int argc, char *argv[])
 {
-	w = initscr(); // init a curses window
-
-	/*
-	 * These two line make it so that getch() doesn't need to wait 
-	 * for a character to be entered for getch() to return.
-	 * This allows the game to update and render even when there is no input
-	 * Also put as: call getch() without blocking
-	 */
-	cbreak(); // put terminal in c break mode
-	nodelay(w, TRUE); // don't wait for enter to read char
-
-	noecho(); // turn off key echoing
-	keypad(w, TRUE); // allow getch() to detect non-character key presses
-
 	initialize();
 
 	while(notReadyToQuit())
@@ -82,7 +68,22 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
-	curs_set(0);
+	w = initscr(); // init a curses window
+
+	/*
+	 * These two line make it so that getch() doesn't need to wait 
+	 * for a character to be entered for getch() to return.
+	 * This allows the game to update and render even when there is no input
+	 * Also put as: call getch() without blocking
+	 */
+	cbreak(); // put terminal in c break mode
+	nodelay(w, TRUE); // don't wait for enter to read char
+
+	noecho(); // turn off key echoing
+	keypad(w, TRUE); // allow getch() to detect non-character key presses
+
+	curs_set(0); // set it so that there's no cursor
+
 	loadResources();
 	initMenu(4);
 	initTitle(60, 5, titleBanner);
