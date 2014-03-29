@@ -98,7 +98,7 @@ void loadResources()
 {
 	printw("Loading Resources . . .\n");
 	refresh();
-	// TODO load resources when the actually exist.
+	// TODO load resources when they actually exist.
 	napms(500);
 }
 
