@@ -20,7 +20,10 @@
 
 #ifdef _WIN32		// defs to check OS
 #endif
-#ifdef __linux__
+#ifdef __unix__
+#define is_unix 1
+#else
+#define is_unix 0
 #endif
 
 void initialize();
@@ -48,6 +51,7 @@ int main(int argc, char *argv[])
 {
 	initialize();
 
+	// main game loop
 	while(notReadyToQuit())
 	{
 		update();
@@ -81,6 +85,13 @@ void initialize()
 
 	noecho(); // turn off key echoing
 	keypad(w, TRUE); // allow getch() to detect non-character key presses
+
+
+	// set the correct size for linux terminals
+	if(is_unix)
+	{
+		resizeterm(25, 80);
+	}
 
 	curs_set(0); // set it so that there's no cursor
 
@@ -132,6 +143,7 @@ void pause()
 
 void cleanup()
 {
+	curs_set(1); // set cursor back to being visible
 	cleanupMenu();
 	delwin(w);
     	endwin();
