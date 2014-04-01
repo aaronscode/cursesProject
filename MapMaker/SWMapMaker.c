@@ -36,7 +36,21 @@ int screenY = 0;
 int mapXIndex, mapYIndex;
 
 char instructions[] = {"\
-Yeah, there are gonna Instructions here at some point\n\
+Yeah, there are gonna be better instructions here at some point\n\n\
+Anyway, for now: There's a 160 by 160 character array for you to play with.\n\
+Pressing most most of the keys on the keyboard will enter that character\n\
+in the currently selected cell. You can use the arrow keys to move around.\n\
+In the future, there will be different editing modes. One for inserting\n\
+characters, one for adding properties (such as colllidability) to tiles,\n\
+even changing colors of cells. Right now that's not implemented, but you can\n\
+still change the number associated with that by pressing F2. That's what EM: \n\
+at the top means. The mode that's actually implemented, movement mode, is also\n\
+displayed at the top, next to the MM: . This mode controls how your cursor\n\
+moves after you enter a character. In MM 1, your cursor moves to the left\n\
+on character input. MM 2 moves your cursor down automatically on input,\n\
+and MM 3, the cursor does not move automatically. You can change this using\n\
+the F3 key. Also, you can't save or anything right now.\n\n\
+Press any key to continue.\
 "};
 
 WINDOW *w;
@@ -93,6 +107,8 @@ int main(int argc, char *argv[])
 		// render status bar at top
 		mvprintw(0, 0, "EM: %d", editMode);
 		mvaddch(0, 5, '|');
+		mvprintw(0, 6, "MM: %d", moveMode);
+		mvaddch(0, 11, '|');
 		for(i = 0; i < SCREEN_WIDTH; i++)
 		{
 			mvaddch(1, i, '-');
@@ -144,6 +160,9 @@ int main(int argc, char *argv[])
 		}
 
 	}while(key != 27);
-
+	
+	delwin(w);
+    	endwin();
+   	refresh();
 	return 0;
 }
