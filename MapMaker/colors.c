@@ -5,6 +5,30 @@
 #include <stdio.h>
 #include <curses.h>
 
+#ifdef _WIN32		// defs to check OS
+#endif
+#ifdef __unix__
+#define is_unix 1
+int colors[] = {0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7};
+#else
+#define is_unix 0
+int colors[] = {0,
+		4,
+		2,
+		6,
+		1,
+		5,
+		3,
+		7};
+#endif
+
 WINDOW *w;
 int main(int argc, char *argv[])
 {
@@ -22,7 +46,7 @@ int main(int argc, char *argv[])
 		{
 			if(k)
 			{
-				init_pair(k, i, j);
+				init_pair(k, colors[i], colors[j]);
 			}
 			color_set(k, NULL);
 			mvprintw(i,j, "@");
