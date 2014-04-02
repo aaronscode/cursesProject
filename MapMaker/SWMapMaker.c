@@ -69,17 +69,13 @@ int main(int argc, char *argv[])
 	keypad(w, TRUE);
 	cbreak();
 	noecho();
+	start_color();
+	init_color(11, 1000, 0, 0);
+	init_pair(1, COLOR_RED, 10);
+	color_set(1, NULL);
+	printw("%d", COLORS);
+	wgetch(w);
 
-	map[0][0] = '0';
-        map[0][1] = '1';
-        map[0][2] = '2';
-        map[0][3] = '3';
-        map[1][0] = '1';
-        map[1][1] = 'd';
-        map[1][2] = 'd';
-        map[1][2] = 'd';
-	map[2][0] = '2';
-	
 	curs_set(0);
 	mvaddstr(0,0, instructions);
 	wgetch(w);

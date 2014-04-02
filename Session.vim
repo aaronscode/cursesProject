@@ -4,6 +4,8 @@ let s:cpo_save=&cpo
 set cpo&vim
 inoremap <silent> <Plug>XPTrawKey 
 imap <silent> <Plug>XPTfallback <Plug>XPTrawKey
+inoremap <silent> <expr> <Plug>delimitMateS-BS delimitMate#WithinEmptyPair() ? "\<Del>" : "\<S-BS>"
+inoremap <silent> <Plug>delimitMateBS =delimitMate#BS()
 cnoremap <C-F4> c
 inoremap <C-F4> c
 cnoremap <C-Tab> w
@@ -34,9 +36,9 @@ vmap [% [%m'gv``
 vmap ]% ]%m'gv``
 vmap a% [%v]%
 nmap gx <Plug>NetrwBrowseX
-nmap <S-Insert> "+gP
-nnoremap <C-Tab> w
 nnoremap <C-F4> c
+nnoremap <C-Tab> w
+nmap <S-Insert> "+gP
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 snoremap <Plug>selectToInsert d<BS>
 map <F5> :!make test 
@@ -101,16 +103,16 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +15 main.c
-badd +31 notes.txt
+badd +17 main.c
 badd +8 Makefile
-badd +5 mainMenu.h
+badd +10 mainMenu.h
 badd +9 update.h
 badd +7 update.c
 badd +1 mainMenu.c
 badd +10 state.h
 badd +1 state.c
 badd +9 README.md
+badd +0 .\doc\notes.txt
 args main.c
 set lines=35 columns=151
 winpos -8 -8
@@ -134,6 +136,24 @@ exe '2resize ' . ((&lines * 8 + 17) / 35)
 exe 'vert 2resize ' . ((&columns * 84 + 75) / 151)
 exe 'vert 3resize ' . ((&columns * 66 + 75) / 151)
 argglobal
+let s:cpo_save=&cpo
+set cpo&vim
+imap <buffer> <S-Tab> <Plug>delimitMateS-Tab
+imap <buffer> <S-BS> <Plug>delimitMateS-BS
+imap <buffer> <BS> <Plug>delimitMateBS
+imap <buffer> <silent> g <Plug>delimitMateJumpMany
+imap <buffer>  <Plug>delimitMateBS
+imap <buffer> " <Plug>delimitMate"
+imap <buffer> ' <Plug>delimitMate'
+imap <buffer> ( <Plug>delimitMate(
+imap <buffer> ) <Plug>delimitMate)
+imap <buffer> [ <Plug>delimitMate[
+imap <buffer> ] <Plug>delimitMate]
+imap <buffer> ` <Plug>delimitMate`
+imap <buffer> { <Plug>delimitMate{
+imap <buffer> } <Plug>delimitMate}
+let &cpo=s:cpo_save
+unlet s:cpo_save
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -236,15 +256,33 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 15 - ((0 * winheight(0) + 12) / 24)
+let s:l = 1 - ((0 * winheight(0) + 12) / 24)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-15
-normal! 019|
+1
+normal! 0
 wincmd w
 argglobal
-edit mainMenu.h
+edit main.c
+let s:cpo_save=&cpo
+set cpo&vim
+imap <buffer> <S-Tab> <Plug>delimitMateS-Tab
+imap <buffer> <S-BS> <Plug>delimitMateS-BS
+imap <buffer> <BS> <Plug>delimitMateBS
+imap <buffer> <silent> g <Plug>delimitMateJumpMany
+imap <buffer>  <Plug>delimitMateBS
+imap <buffer> " <Plug>delimitMate"
+imap <buffer> ' <Plug>delimitMate'
+imap <buffer> ( <Plug>delimitMate(
+imap <buffer> ) <Plug>delimitMate)
+imap <buffer> [ <Plug>delimitMate[
+imap <buffer> ] <Plug>delimitMate]
+imap <buffer> ` <Plug>delimitMate`
+imap <buffer> { <Plug>delimitMate{
+imap <buffer> } <Plug>delimitMate}
+let &cpo=s:cpo_save
+unlet s:cpo_save
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -275,8 +313,8 @@ setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal noexpandtab
-if &filetype != 'cpp'
-setlocal filetype=cpp
+if &filetype != 'c'
+setlocal filetype=c
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -334,11 +372,11 @@ setlocal statusline=%-3.3n\ %f\ %h%m%r%w[%{strlen(&ft)?&ft:'none'},%{strlen(&fen
 setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'cpp'
-setlocal syntax=cpp
+if &syntax != 'c'
+setlocal syntax=c
 endif
 setlocal tabstop=8
-setlocal tags=~/CIS1/cursesProject/.git/cpp.tags,~/CIS1/cursesProject/.git/tags,./tags,tags
+setlocal tags=~/CIS1/cursesProject/.git/c.tags,~/CIS1/cursesProject/.git/tags,./tags,tags
 setlocal textwidth=0
 setlocal thesaurus=
 setlocal noundofile
@@ -347,15 +385,33 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 10 - ((0 * winheight(0) + 4) / 8)
+let s:l = 53 - ((0 * winheight(0) + 4) / 8)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10
+53
 normal! 0
 wincmd w
 argglobal
-edit notes.txt
+edit .\doc\notes.txt
+let s:cpo_save=&cpo
+set cpo&vim
+imap <buffer> <S-Tab> <Plug>delimitMateS-Tab
+imap <buffer> <S-BS> <Plug>delimitMateS-BS
+imap <buffer> <BS> <Plug>delimitMateBS
+imap <buffer> <silent> g <Plug>delimitMateJumpMany
+imap <buffer>  <Plug>delimitMateBS
+imap <buffer> " <Plug>delimitMate"
+imap <buffer> ' <Plug>delimitMate'
+imap <buffer> ( <Plug>delimitMate(
+imap <buffer> ) <Plug>delimitMate)
+imap <buffer> [ <Plug>delimitMate[
+imap <buffer> ] <Plug>delimitMate]
+imap <buffer> ` <Plug>delimitMate`
+imap <buffer> { <Plug>delimitMate{
+imap <buffer> } <Plug>delimitMate}
+let &cpo=s:cpo_save
+unlet s:cpo_save
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -458,12 +514,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 31 - ((0 * winheight(0) + 16) / 33)
+let s:l = 14 - ((0 * winheight(0) + 16) / 33)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-31
-normal! 0
+14
+normal! 022|
 wincmd w
 exe '1resize ' . ((&lines * 24 + 17) / 35)
 exe 'vert 1resize ' . ((&columns * 84 + 75) / 151)
