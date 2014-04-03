@@ -70,10 +70,8 @@ int main(int argc, char *argv[])
 	cbreak();
 	noecho();
 	start_color();
-	init_color(11, 1000, 0, 0);
-	init_pair(1, COLOR_RED, 10);
-	color_set(1, NULL);
-	printw("%d", COLORS);
+	mvaddch(3,3, ACS_ULCORNER);
+	addch(ACS_URCORNER);
 	wgetch(w);
 
 	curs_set(0);
