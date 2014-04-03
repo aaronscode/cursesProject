@@ -29,6 +29,20 @@ int colors[] = {0,
 		7};
 #endif
 
+int alternateCS[] = 
+	{ACS_ULCORNER,
+	ACS_LLCORNER,
+	ACS_URCORNER,
+	ACS_LRCORNER,
+	ACS_RTEE,
+	ACS_LTEE,
+	ACS_BTEE,
+	ACS_TTEE,
+	ACS_HLINE,
+	ACS_VLINE,
+	ACS_PLUS,
+	ACS_S1};
+
 WINDOW *w;
 int main(int argc, char *argv[])
 {
@@ -62,6 +76,11 @@ int main(int argc, char *argv[])
 	mvprintw(21, 0, "YELLOW: %d", COLOR_YELLOW);
 	mvprintw(22, 0, "BLUE: %d", COLOR_BLUE);
 	mvprintw(23, 0, "MAGENTA: %d", COLOR_MAGENTA);
+	move(0,9);
+	for(i = 0; i < (sizeof(alternateCS)/sizeof(int)); i++)
+	{
+		addch(alternateCS[i]);
+	}
 	getch();
 	delwin(w);
     	endwin();
