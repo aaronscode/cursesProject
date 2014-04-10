@@ -28,7 +28,7 @@ int colors[] = {0,
 		3,
 		7};
 #endif
-
+/*
 int alternateCS[] = 
 	{ACS_ULCORNER,
 	ACS_LLCORNER,
@@ -42,7 +42,7 @@ int alternateCS[] =
 	ACS_VLINE,
 	ACS_PLUS,
 	ACS_S1};
-
+*/
 WINDOW *w;
 int main(int argc, char *argv[])
 {

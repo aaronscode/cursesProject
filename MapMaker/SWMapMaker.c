@@ -4,6 +4,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include <curses.h>
 
 #define SCREEN_WIDTH 80
@@ -19,7 +21,28 @@
 #define MM_DOWN 2
 #define MM_NONE 3
 
+#ifdef __unix__
+#define is_unix 1
+int colors[] = {0,1,2,3,4,5,6,7};
+#else
+#define is_unix 0
+int colors[] = {0,4,2,6,1,5,3,7};
+#endif
+
+void startup(int argc, char *argv[]);
+void loadMap(char *mapName);
+void instructions();
+void render();
+void update();
+void saveMap();
+
+bool mapExists(char *fname);
+
+char mapName[40];
+char mapDesc[80] = {'\0'};
 char map[MAP_HEIGHT][MAP_WIDTH] = {'\0'};
+int colorMap[MAP_HEIGHT][MAP_WIDTH] = {0};
+int propertyMap[MAP_HEIGHT][MAP_WIDTH] = {0};
 //cursor's position relative to the screen's x-orign, should be centered
 int cursorX = (int) SCREEN_WIDTH / 2 - 1;
 //cursor's position relative to the screen's y-orign, should be centered
@@ -34,6 +57,90 @@ int screenY = 0;
 
 // hold the x and y indicies of the character that needs to be printed from map[][]
 int mapXIndex, mapYIndex;
+
+FILE *fp;
+
+WINDOW *w;
+
+int key; // user's input
+
+int editMode = EM_INSERTION;
+// 1 means cursor moves left on character inmput, 2 moves down, 3 turn off automatic movement
+int moveMode = MM_LEFT; 
+int currColorPair = 0;
+
+int i, j, k; // generic counters
+
+int main(int argc, char *argv[])
+{
+
+	startup(argc, argv);
+	instructions();	
+
+	do{
+		// RENDERING CODE
+		render();
+		// UPDATING CODE
+		update();
+	}while(key != 27);
+	
+	delwin(w);
+    	endwin();
+   	refresh();
+	return 0;
+}
+
+void startup(int argc, char *argv[])
+{
+	w = initscr();
+	start_color();
+	keypad(w, TRUE);
+	cbreak();
+	for(i = 0; i < 8; i++)
+	{
+		for(j = 0; j < 8; j++)
+		{
+			if(k)
+			{
+				init_pair(k, colors[i], colors[j]);
+			}
+			k++;
+		}
+	}
+	if(argc < 2)
+	{
+		printw("Map file name not imput, defauling to \"MapUnamed.txt\"\n");
+		printw("Please enter a short (less than one line) description of the map:\n");
+		getstr(mapDesc);
+		printw("Press any key to continue");
+		strcpy(mapName, "MapUnamed.txt");
+	} else {
+		strcpy(mapName, argv[1]);
+		printw("Attempting to open file: \"%s\"\n", mapName);	
+		if(mapExists(mapName))
+		{
+			printw("Map file found. Loading...\n");
+			loadMap(mapName);
+			printw("Map loaded, press any key to continue");
+		} else {
+			printw("Map file not found. A file named \"%s\" will be created when you save.\n", mapName);
+			printw("Please enter a short (less than one line) description of the map:\n");
+			getstr(mapDesc);
+			printw("Press any key to continue");
+		}
+	}
+	noecho();
+	wgetch(w);
+
+}
+
+void loadMap(char *mapName)
+{
+
+}
+
+void instructions()
+{
 
 char instructions[] = {"\
 Yeah, there are gonna be better instructions here at some point\n\n\
@@ -53,110 +160,182 @@ the F3 key. Also, you can't save or anything right now.\n\n\
 Press any key to continue.\
 "};
 
-WINDOW *w;
-
-int key; // user's input
-
-int editMode = EM_INSERTION;
-// 1 means cursor moves left on character inmput, 2 moves down, 3 turn off automatic movement
-int moveMode = MM_LEFT; 
-
-int i; // generic counter
-
-int main(int argc, char *argv[])
-{
-	w = initscr();
-	keypad(w, TRUE);
-	cbreak();
-	noecho();
-	start_color();
-	mvaddch(3,3, ACS_ULCORNER);
-	addch(ACS_URCORNER);
-	wgetch(w);
-
 	curs_set(0);
 	mvaddstr(0,0, instructions);
 	wgetch(w);
 	curs_set(1);
+}
 
-	do{
-		// RENDERING CODE
-		clear();
+void render()
+{
+	clear();
 
-		// nested for loops to render map
-		for(screenY = 0; screenY < SCREEN_HEIGHT; screenY++)
+	// nested for loops to render map
+	for(screenY = 0; screenY < SCREEN_HEIGHT; screenY++)
+	{
+		mapYIndex = screenY + mapY - cursorY;
+		for(screenX = 0; screenX < SCREEN_WIDTH; screenX++)
 		{
-			mapYIndex = screenY + mapY - cursorY;
-			for(screenX = 0; screenX < SCREEN_WIDTH; screenX++)
+			mapXIndex = screenX + mapX - cursorX;
+			if(((mapXIndex >= 0) && (mapYIndex >= 0)) && ((mapXIndex < MAP_WIDTH) && (mapYIndex < MAP_HEIGHT)))
 			{
-				mapXIndex = screenX + mapX - cursorX;
-				if(((mapXIndex >= 0) && (mapYIndex >= 0)) && ((mapXIndex < MAP_WIDTH) && (mapYIndex < MAP_HEIGHT)))
+				if(map[mapYIndex][mapXIndex] != '\0')
 				{
-					if(map[mapYIndex][mapXIndex] != '\0')
-					mvaddch(screenY, screenX, map[mapYIndex][mapXIndex]);
+					color_set(colorMap[mapYIndex][mapXIndex], NULL);
+					if((EM_INSERTION == editMode) || (EM_COLOR == editMode))
+					{
+						mvaddch(screenY, screenX, map[mapYIndex][mapXIndex]);
+					} else if(EM_PROPERTIES == editMode)
+					{
+						mvprintw(screenY, screenX,"%d", propertyMap[mapYIndex][mapXIndex]);
+					}
 				}
 			}
 		}
+	}
+	color_set(0, NULL);
 
-		// render status bar at top
-		mvprintw(0, 0, "EM: %d", editMode);
-		mvaddch(0, 5, '|');
-		mvprintw(0, 6, "MM: %d", moveMode);
-		mvaddch(0, 11, '|');
-		for(i = 0; i < SCREEN_WIDTH; i++)
+	// render status bar at top
+	mvprintw(0, 0, "EM: %d", editMode);
+	addch('|');
+	printw("MM: %d", moveMode);
+	addch('|');
+	printw("CP: %d", currColorPair);
+	color_set(currColorPair, NULL);
+	mvaddch(0, 19, '@');
+	color_set(0, NULL);
+	addch('|');
+	for(i = 0; i < 60; i++)
+	{
+		if(mapDesc[i] != '\0')
 		{
-			mvaddch(1, i, '-');
+			addch(mapDesc[i]);
 		}
-
-		move(cursorY, cursorX);
-		refresh();
-
-		// UPDATING CODE
-		key = wgetch(w);
-		switch(key)
-		{
-			case KEY_UP:
-				if(mapY > 0) mapY--;
-				break;
-			case KEY_DOWN:
-				if(mapY < MAP_HEIGHT - 1) mapY++;
-				break;
-			case KEY_LEFT:
-				if(mapX > 0) mapX--;
-				break;
-			case KEY_RIGHT:
-				if(mapX < MAP_WIDTH - 1) mapX++;
-				break;
-			case KEY_F(1):
-				// TODO add code to save map
-				break;
-			case KEY_F(2):
-				if(editMode < EM_PROPERTIES) editMode++;
-				else editMode = EM_INSERTION;
-				break;
-			case KEY_F(3):
-				if(moveMode < MM_NONE) moveMode++;
-				else moveMode = MM_LEFT;
-				break;
-			default:
-				if((key >= 33) || (key <= 126))
-				{
-					map[mapY][mapX] = key;
-					if((mapX < MAP_WIDTH - 1) && (moveMode ==  MM_LEFT))
-					{
-						mapX++;
-					} else if((mapY < MAP_HEIGHT - 1) && (moveMode == MM_DOWN))
-					{
-						mapY++;
-					}
-				}
-				break;
-		}
-
-	}while(key != 27);
+	}
 	
-	delwin(w);
-    	endwin();
-   	refresh();
-	return 0;
+	for(i = 0; i < SCREEN_WIDTH; i++)
+	{
+		mvaddch(1, i, '-');
+	}
+
+	move(cursorY, cursorX);
+	refresh();
+}
+
+void update()
+{
+
+	key = wgetch(w);
+	switch(key)
+	{
+		case KEY_UP:
+			if(mapY > 0) mapY--;
+			break;
+		case KEY_DOWN:
+			if(mapY < MAP_HEIGHT - 1) mapY++;
+			break;
+		case KEY_LEFT:
+			if(mapX > 0) mapX--;
+			break;
+		case KEY_RIGHT:
+			if(mapX < MAP_WIDTH - 1) mapX++;
+			break;
+		case KEY_F(1):
+			saveMap();
+			break;
+		case KEY_F(2):
+			if(editMode < EM_PROPERTIES) editMode++;
+			else editMode = EM_INSERTION;
+			break;
+		case KEY_F(3):
+			if(moveMode < MM_NONE) moveMode++;
+			else moveMode = MM_LEFT;
+			break;
+		default:
+			switch(editMode)
+			{
+				case EM_INSERTION:
+					// take care of backspace
+					if(key == 8)
+					{
+						if((moveMode == MM_LEFT) && (mapX > 0)) mapX--; // move back
+						else if((moveMode == MM_DOWN) && (mapY > 0)) mapY--; // move up
+						map[mapY][mapX] = 0;
+					}
+					// if key within printable ascii range, set cell to that value
+					if((key >= 33) || (key <= 126)) 
+					{
+						map[mapY][mapX] = key;
+						if((mapX < MAP_WIDTH - 1) && (moveMode ==  MM_LEFT))
+						{
+							mapX++;
+						} else if((mapY < MAP_HEIGHT - 1) && (moveMode == MM_DOWN))
+						{
+							mapY++;
+						}
+			
+					}
+					break;
+				case EM_COLOR:
+					switch(key)
+					{
+						case 'z':
+							if(currColorPair > 0) currColorPair--;
+							break;
+						case 'c':
+							if(currColorPair < 63) currColorPair++;
+							break;
+						case 'a':
+							if((currColorPair-8) > 0) currColorPair -= 8;
+							else currColorPair = 0;
+							break;
+						case 'd':
+							if((currColorPair+8) < 63) currColorPair += 8;
+							else currColorPair = 63;
+							break;
+						case 'x':
+							colorMap[mapY][mapX] = currColorPair;
+							if((mapX < MAP_WIDTH - 1) && (moveMode ==  MM_LEFT))
+							{
+								mapX++;
+							} else if((mapY < MAP_HEIGHT - 1) && (moveMode == MM_DOWN))
+							{
+								mapY++;
+							}
+							break;
+						default:
+							break;
+							
+					}
+					break;
+				case EM_PROPERTIES:
+					if(('0' <= key) && (key <= '9'))
+					{
+						propertyMap[mapY][mapX] = key - '0';
+					}
+					if((mapX < MAP_WIDTH - 1) && (moveMode ==  MM_LEFT))
+						{
+							mapX++;
+						} else if((mapY < MAP_HEIGHT - 1) && (moveMode == MM_DOWN))
+						{
+							mapY++;
+						}
+					break;
+			}
+			break;
+	}
+}
+
+void saveMap()
+{
+
+}
+
+bool mapExists(char *fname)
+{
+	if( access( fname, F_OK ) != -1 ) {
+		return 1;
+	} else {
+		return 0;
+	}
 }
