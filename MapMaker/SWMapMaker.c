@@ -58,7 +58,7 @@ int screenY = 0;
 // hold the x and y indicies of the character that needs to be printed from map[][]
 int mapXIndex, mapYIndex;
 
-FILE *fp;
+FILE *fp = NULL;
 
 WINDOW *w;
 
@@ -136,7 +136,144 @@ void startup(int argc, char *argv[])
 
 void loadMap(char *mapName)
 {
+	bool timeForNext = FALSE;
+	int temp;
+	char chFromFile;
+	char digitList[6];
+	fp = fopen(mapName, "r");
+	addch(getc(fp));
+	addch(getc(fp));
+	fgets(mapDesc, 79, fp);
+	for(i = 0; i < (sizeof(mapDesc)/sizeof(char)); i++)
+	{
+		if(mapDesc[i] == '\n')
+		{
+			mapDesc[i] = '\0';
+		}
+	}
+	addch(getc(fp));
+	addch(getc(fp));
+	/*
+	digitList[0] = getc(fp);
+	digitList[1] = getc(fp);
+	digitList[2] = getc(fp);
+	sscanf(digitList, "%d", &temp);
+	map[0][0] = temp;
+	printw("%c", map[0][0]);
+	addch(getc(fp));
+	addch(getc(fp));
+	addch(getc(fp));
+	addch(getc(fp));
+	addch(getc(fp));
+	addch(getc(fp));
+	*/
 
+	// parse character data
+	for(i = 0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			k = 0;
+			digitList[0] = '\0';
+			digitList[1] = '\0';
+			digitList[2] = '\0';
+			digitList[3] = '\0';
+			digitList[4] = '\0';
+			digitList[5] = '\0';
+			temp = 0;
+			timeForNext = FALSE;
+			do
+			{
+				chFromFile = getc(fp);
+				if((chFromFile == ','))
+				{
+				} else if((chFromFile == ' ') || (chFromFile == '\n'))
+				{
+				
+					timeForNext = TRUE;
+					sscanf(digitList, "%d", &temp);
+					map[i][j] = (char)temp;
+				} else {
+					digitList[k] = chFromFile;
+					k++;
+					}
+			}while(!timeForNext);
+		}
+	}
+
+	// parse color data
+	addch(getc(fp));
+	addch(getc(fp));
+	for(i = 0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			k = 0;
+			digitList[0] = '\0';
+			digitList[1] = '\0';
+			digitList[2] = '\0';
+			digitList[3] = '\0';
+			digitList[4] = '\0';
+			digitList[5] = '\0';
+			temp = 0;
+			timeForNext = FALSE;
+			do
+			{
+				chFromFile = getc(fp);
+				if((chFromFile == ','))
+				{
+				} else if((chFromFile == ' ') || (chFromFile == '\n'))
+				{
+				
+					timeForNext = TRUE;
+					sscanf(digitList, "%d", &temp);
+					colorMap[i][j] = temp;
+				} else {
+					digitList[k] = chFromFile;
+					k++;
+					}
+			}while(!timeForNext);
+		}
+	}
+
+	// parse property date
+	addch(getc(fp));
+	addch(getc(fp));
+	for(i = 0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			k = 0;
+			digitList[0] = '\0';
+			digitList[1] = '\0';
+			digitList[2] = '\0';
+			digitList[3] = '\0';
+			digitList[4] = '\0';
+			digitList[5] = '\0';
+			temp = 0;
+			timeForNext = FALSE;
+			do
+			{
+				chFromFile = getc(fp);
+				if((chFromFile == ','))
+				{
+				} else if((chFromFile == ' ') || (chFromFile == '\n'))
+				{
+				
+					timeForNext = TRUE;
+					sscanf(digitList, "%d", &temp);
+					propertyMap[i][j] = temp;
+				} else {
+					digitList[k] = chFromFile;
+					k++;
+					}
+			}while(!timeForNext);
+		}
+	}
+	
+
+	fclose(fp);
+	fp = NULL;
 }
 
 void instructions()
@@ -263,9 +400,10 @@ void update()
 						map[mapY][mapX] = 0;
 					}
 					// if key within printable ascii range, set cell to that value
-					if((key >= 33) || (key <= 126)) 
+					if((key >= 33) && (key <= 126)) 
 					{
 						map[mapY][mapX] = key;
+						colorMap[mapY][mapX] = currColorPair;
 						if((mapX < MAP_WIDTH - 1) && (moveMode ==  MM_LEFT))
 						{
 							mapX++;
@@ -328,7 +466,59 @@ void update()
 
 void saveMap()
 {
+	fp = fopen(mapName, "w+");
+	fprintf(fp, "d\n");
+	fprintf(fp, "%s\n", mapDesc);
+	
+	// save which character is used for tiles
+	fprintf(fp, "t\n");
+	for(i =0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			fprintf(fp, "%d", map[i][j]);
+			if(j < MAP_WIDTH - 1)
+			{
+				fprintf(fp, ", ");
+			} else {
+				fprintf(fp, "\n");
+			}
+		}
+	}
 
+	// save color data
+	fprintf(fp, "c\n");
+	for(i =0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			fprintf(fp, "%d", colorMap[i][j]);
+			if(j < MAP_WIDTH - 1)
+			{
+				fprintf(fp, ", ");
+			} else {
+				fprintf(fp, "\n");
+			}
+		}
+	}
+
+	// save tile properties
+	fprintf(fp, "p\n");
+	for(i =0; i < MAP_HEIGHT; i++)
+	{
+		for(j = 0; j < MAP_WIDTH; j++)
+		{
+			fprintf(fp, "%d", propertyMap[i][j]);
+			if(j < MAP_WIDTH - 1)
+			{
+				fprintf(fp, ", ");
+			} else {
+				fprintf(fp, "\n");
+			}
+		}
+	}
+	fclose(fp);
+	fp = NULL;
 }
 
 bool mapExists(char *fname)

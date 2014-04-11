@@ -63,3 +63,24 @@ StateID's:
 =========================================
 = mapFileParser.h                       =
 =========================================
+
+=========================================
+= Map File definition                   =
+=========================================
+Let's define a file standard, shall we?
+
+d (newline)
+[description string] (newline)
+t (newline)
+[comma seperated list ofintigers, 160 numbers long] (newline)
+[another comma seperated list of intergers] (newline)
+[do that another 158 times] (newline)
+[to form a 160 X 160 array, holding the tile id's] (newline)
+c (newline)
+[comma seperated list of 160 X 160 intergers] (newline)
+[this one hold color data] (newline)
+[in a 1 to 1 mapping of the array above] (newline)
+p (newline)
+[another 160 X 160] (newline)
+[this one holds tile properties] (newline)
+(end of file)
