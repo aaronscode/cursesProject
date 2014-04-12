@@ -333,6 +333,11 @@ void render()
 	color_set(0, NULL);
 
 	// render status bar at top
+	for(i = 0; i < SCREEN_WIDTH; i++)
+	{
+		mvaddch(0, i, ' ');
+	}
+
 	mvprintw(0, 0, "EM: %d", editMode);
 	addch('|');
 	printw("MM: %d", moveMode);
@@ -354,6 +359,13 @@ void render()
 	{
 		mvaddch(1, i, '-');
 	}
+	
+	// render coords at bottom
+	mvprintw(23, 0, "------------");
+	mvprintw(24, 0, "            ");
+	mvprintw(24, 0, "x:%d", mapX);
+	mvprintw(24, 5, "|y:%d", mapY);
+	mvprintw(24, 11, "|");
 
 	move(cursorY, cursorX);
 	refresh();
@@ -400,7 +412,7 @@ void update()
 						map[mapY][mapX] = 0;
 					}
 					// if key within printable ascii range, set cell to that value
-					if((key >= 33) && (key <= 126)) 
+					if((key >= 32) && (key <= 126)) 
 					{
 						map[mapY][mapX] = key;
 						colorMap[mapY][mapX] = currColorPair;
