@@ -84,3 +84,15 @@ p (newline)
 [another 160 X 160] (newline)
 [this one holds tile properties] (newline)
 (end of file)
+
+=========================================
+= Game.h                                =
+=========================================
+GameState Id's:
+	0 Walking
+	1 Dialogue
+	2 battle
+	3 event
+	4 pauseMenu
+	5 shop
+

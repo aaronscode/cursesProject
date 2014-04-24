@@ -6,6 +6,7 @@
  * Credits: 
  * Programming - Aaron Gross
  * Story/Comic relief - Jason Pepper, Jack Hafer
+ * Maps - Jason Pepper
  * 3/4/14
  * V 0.2
  * =============================================================================
@@ -18,23 +19,12 @@
 #include "update.h"
 #include "mainMenu.h"
 
-#ifdef _WIN32		// defs to check OS
-#endif
-#ifdef __unix__
-#define is_unix 1
-#else
-#define is_unix 0
-#endif
-
 void initialize();
-void loadResources();
 void render();
 void pause();
 void cleanup();
 
 bool notReadyToQuit();
-
-int getKey();
 
 int tick = 0;
 
@@ -74,8 +64,22 @@ void initialize()
 {
 	w = initscr(); // init a curses window
 
+	start_color(); // call so can use colors
+	int i, j, k = 0; // counter variables
+	for(i = 0; i < 8; i++) // initialize all 64 color pairs
+	{
+		for(j = 0; j < 8; j++)
+		{
+			if(k) // skip cp #1; already defined as black and white
+			{
+				init_pair(k, colors[i], colors[j]);
+			}
+			k++;
+		}
+	}
+
 	/*
-	 * These two line make it so that getch() doesn't need to wait 
+	 * These two lines make it so that getch() doesn't need to wait 
 	 * for a character to be entered for getch() to return.
 	 * This allows the game to update and render even when there is no input
 	 * Also put as: call getch() without blocking
@@ -93,24 +97,18 @@ void initialize()
 		resizeterm(25, 80);
 	}
 
-	curs_set(0); // set it so that there's no cursor
+	curs_set(0); // hide the cursor
 
-	loadResources();
 	initMenu(4);
 	initTitle(60, 5, titleBanner);
 	initMenuChoice(GAME, "Play Game");
 	initMenuChoice(INSTRUCTIONS, "Instructions");
 	initMenuChoice(OPTIONS, "Options");
 	initMenuChoice(QUIT, "Quit");
-	setState(MAIN_MENU);
-}
 
-void loadResources()
-{
-	printw("Loading Resources . . .\n");
-	refresh();
-	// TODO load resources when they actually exist.
-	napms(500);
+	initGame();
+
+	setState(MAIN_MENU);
 }
 
 void render() 
@@ -145,6 +143,8 @@ void cleanup()
 {
 	curs_set(1); // set cursor back to being visible
 	cleanupMenu();
+	cleanupGame();
+	free(maps);
 	delwin(w);
     	endwin();
    	refresh();

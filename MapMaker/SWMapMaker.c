@@ -144,6 +144,7 @@ void loadMap(char *mapName)
 	addch(getc(fp));
 	addch(getc(fp));
 	fgets(mapDesc, 79, fp);
+	// strip \n from mapDescription
 	for(i = 0; i < (sizeof(mapDesc)/sizeof(char)); i++)
 	{
 		if(mapDesc[i] == '\n')
