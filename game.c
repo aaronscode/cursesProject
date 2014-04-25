@@ -16,7 +16,9 @@ int mapX; // player's current x position on the map
 int mapY; // player's current y position on the map
 
 int facing = DIR_UP; // facing up on 
-int mapNumber = 0;
+int mapNumber = 0; // number of the map the user is currently on
+
+char characterIcon = 'U';
 
 void setGameState(int gs, int gsData)
 {
@@ -55,15 +57,19 @@ void updateGame(int key)
 	switch(key)
 	{
 		case KEY_UP:
+			characterIcon = 'U';
 			if((mapY > 0) && isNotSolid(DIR_UP)) mapY--;
 			break;
 		case KEY_DOWN:
+			characterIcon = 'D';
 			if((mapY <  (MAP_HEIGHT - 1)) && isNotSolid(DIR_DOWN)) mapY++;
 			break;
 		case KEY_LEFT:
+			characterIcon = 'L';
 			if((mapX > 0) && isNotSolid(DIR_LEFT)) mapX--;
 			break;
 		case KEY_RIGHT:
+			characterIcon = 'R';
 			if((mapX < (MAP_WIDTH - 1)) && isNotSolid(DIR_RIGHT)) mapX++;
 			break;
 		case 27:
@@ -101,7 +107,7 @@ void renderGame()
 	mvprintw(24, 0, "x:%d", mapX);
 	mvprintw(24, 5, "|y:%d", mapY);
 	printw(" %c", maps[mapNumber].mapTiles[mapY][mapX]);
-	mvprintw(yCenter, xCenter, "@");
+	mvaddch(yCenter, xCenter, characterIcon);
 }
 
 void cleanupGame()
