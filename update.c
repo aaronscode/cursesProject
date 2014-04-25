@@ -1,4 +1,4 @@
-#define TICKS_TO_COOLDOWN 4
+#define TICKS_TO_COOLDOWN 0
 
 int inputCoolCount = 0;
 

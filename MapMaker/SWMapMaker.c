@@ -154,20 +154,6 @@ void loadMap(char *mapName)
 	}
 	addch(getc(fp));
 	addch(getc(fp));
-	/*
-	digitList[0] = getc(fp);
-	digitList[1] = getc(fp);
-	digitList[2] = getc(fp);
-	sscanf(digitList, "%d", &temp);
-	map[0][0] = temp;
-	printw("%c", map[0][0]);
-	addch(getc(fp));
-	addch(getc(fp));
-	addch(getc(fp));
-	addch(getc(fp));
-	addch(getc(fp));
-	addch(getc(fp));
-	*/
 
 	// parse character data
 	for(i = 0; i < MAP_HEIGHT; i++)

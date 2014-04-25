@@ -11,6 +11,9 @@
 #define MAP_WIDTH 160
 #define MAP_HEIGHT 160
 
+#define SOLID_TILE 1
+#define NPC_TILE 2
+
 #ifdef _WIN32		// defs to check OS
 #endif
 #ifdef __unix__
@@ -25,8 +28,8 @@ typedef struct Map{
 	char mapName[80];
 	char mapDesc[80];
 	char mapTiles[MAP_WIDTH][MAP_HEIGHT];
-	char mapColors[MAP_WIDTH][MAP_HEIGHT];
-	char mapProperties[MAP_WIDTH][MAP_HEIGHT];
+	int mapColors[MAP_WIDTH][MAP_HEIGHT];
+	int mapProperties[MAP_WIDTH][MAP_HEIGHT];
 } Map;
 
 Map *maps;

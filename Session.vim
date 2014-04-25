@@ -36,9 +36,9 @@ vmap [% [%m'gv``
 vmap ]% ]%m'gv``
 vmap a% [%v]%
 nmap gx <Plug>NetrwBrowseX
-nmap <S-Insert> "+gP
-nnoremap <C-Tab> w
 nnoremap <C-F4> c
+nnoremap <C-Tab> w
+nmap <S-Insert> "+gP
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 snoremap <Plug>selectToInsert d<BS>
 map <F5> :!make test 
@@ -103,7 +103,7 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +23 main.c
+badd +53 main.c
 badd +8 Makefile
 badd +10 mainMenu.h
 badd +9 update.h
@@ -114,7 +114,7 @@ badd +1 state.c
 badd +9 README.md
 badd +1 .\doc\notes.txt
 badd +1 mapParser.h
-badd +0 mapParser.c
+badd +189 mapParser.c
 args main.c
 set lines=35 columns=151
 winpos -8 -8

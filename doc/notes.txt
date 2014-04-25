@@ -95,4 +95,8 @@ GameState Id's:
 	3 event
 	4 pauseMenu
 	5 shop
-
+int facing
+	0 - [U]p
+	1 - [D]own
+	2 - [L]eft
+	3 - [R]ight
