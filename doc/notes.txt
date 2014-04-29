@@ -88,7 +88,7 @@ p (newline)
 =========================================
 = Game.h                                =
 =========================================
-GameState Id's:
+(NOT USED ANYMORE) GameState Id's:
 	0 Walking
 	1 Dialogue
 	2 battle

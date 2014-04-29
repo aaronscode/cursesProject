@@ -145,9 +145,10 @@ void cleanup()
 	cleanupMenu();
 	cleanupGame();
 	free(maps);
+	clear();
+	refresh();
 	delwin(w);
     	endwin();
-   	refresh();
 }
 
 bool notReadyToQuit()
