@@ -144,7 +144,6 @@ void cleanup()
 	curs_set(1); // set cursor back to being visible
 	cleanupMenu();
 	cleanupGame();
-	free(maps);
 	clear();
 	refresh();
 	delwin(w);

@@ -51,7 +51,7 @@ void initChad()
 {
 	//TODO loadsavefile, if it exists, to set all these values
 	chad.experience = 0;
-	chad.level = cbrt((double) chad.experience * 5 / 4);
+	chad.level = pow((double) chad.experience * 5 / 4, 1/3);
 	chad.attack = 0;
 	chad.defence = 0;
 	chad.hp = 0; 
@@ -184,6 +184,7 @@ void renderGame()
 void cleanupGame()
 {
 	free(maps);
+	maps = NULL;
 }
 
 void setDirection(int newDirection)
