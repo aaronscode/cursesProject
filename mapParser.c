@@ -173,7 +173,10 @@ void loadMaps(Map* mp)
 		fp = NULL;
 	}
 
-
+	for(i = 0; i < numMaps; i++)
+	{
+		free(mapNames[i]);
+	}
 
 	free(mapNames);
 }
