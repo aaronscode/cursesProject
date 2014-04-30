@@ -86,6 +86,23 @@ p (newline)
 (end of file)
 
 =========================================
+= Warp File definiton                   =
+=========================================
+First line is the number of warps contained in the file, then a newline
+character is read. 
+On the next line is the default starting point for Chad when a savefile is not
+loaded. It is comprised of the warp ID (allways 900 for the starting point),
+then a space, then the map number, then a space, then the x coordinate, space,
+y coordinate, space, direction (0-3). The following lines contain the rest of
+the map warps, which follow the same format, and start counting up by 1 with
+the warp ID of 901. The fact that the  900 is the first entry signifies that
+it is the starting point. The starting point should always come first. The
+order of the rest does not matter, as the data will be read from the map, but
+it needs to count up from 901 by one's. What I mean is, the Warp Id's must be
+in order, but where the warps are doesn't have to be the order in which the
+player inevitably accesses them. 
+
+=========================================
 = Game.h                                =
 =========================================
 (NOT USED ANYMORE) GameState Id's:

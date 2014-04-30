@@ -10,6 +10,9 @@ int penY = 0;
 // holds x and y coordinates of map tile to be drawn to screen
 int mapXIndex, mapYIndex;
 
+int warpTable[MAX_NUM_WARPS][5];
+int warpID;
+
 hero chad;
 
 bool menuUp = FALSE; // if the pause menu is currently displayed or not
@@ -31,6 +34,7 @@ void initGame()
 	numMaps = getNumMaps();
 	maps = malloc(numMaps * sizeof(Map));
 	loadMaps(maps);
+	/*
 	printw("%d Maps Loaded\n", numMaps);
 	int i;
 	for(i = 0; i < numMaps; i++)
@@ -39,8 +43,64 @@ void initGame()
 	}
 	refresh();
 	napms(2000);
+	*/
+	loadWarpTable();
 
 	initChad();
+}
+
+/****************************** loadWarpTable() *************************
+ *
+ *
+ *
+ */
+void loadWarpTable()
+{
+	FILE *warpFile;
+	int numWarps;
+	char ch_in;
+	char digitsList[5];
+	warpFile = fopen("warpTable.txt", "r");
+	int i = 0;
+	while((ch_in = getc(warpFile)) != '\n')
+	{
+		digitsList[i] = ch_in;
+		i++;
+	}
+	sscanf(digitsList, "%d", &numWarps);
+
+	for(i = 0; i < numWarps; i++)
+	{
+		int j;
+		for(j = 0; j < 5; j++)
+		{
+			mvprintw(4,0, "I got here");
+			refresh();
+			int k = 0;
+			int temp = 0;
+			digitsList[0] = '\0';
+			digitsList[1] = '\0';
+			digitsList[2] = '\0';
+			digitsList[3] = '\0';
+			bool timeForNext = FALSE;
+			do
+			{
+				ch_in = getc(warpFile);
+				if((ch_in == ' ') || (ch_in == '\n'))
+				{
+					timeForNext = TRUE;
+					sscanf(digitsList, "%d", &temp);
+					warpTable[i][j] = temp;
+				} else {
+					digitsList[k] = ch_in;
+					k++;
+				}
+			}while(!timeForNext);
+		}
+	}
+	free(warpFile);
+	warpFile = NULL;
+	
 }
 
 /******************************* initChad() *****************************
@@ -56,7 +116,7 @@ void initChad()
 	chad.defence = 0;
 	chad.hp = 0; 
 	chad.speed = 0;
-	setMap(1, 78, 90, DIR_UP);
+	setMap(warpTable[0][1], warpTable[0][2], warpTable[0][3], warpTable[0][4]);
 }
 
 /***************************** updateGame() ************************
@@ -72,18 +132,22 @@ void updateGame(int key)
 			case KEY_UP:
 				setDirection(DIR_UP);
 				if((chad.location.y > 0) && isNotSolid(DIR_UP)) chad.location.y--;
+				if((warpID = isWarp())) warp(warpID);
 				break;
 			case KEY_DOWN:
 				setDirection(DIR_DOWN);
 				if((chad.location.y <  (MAP_HEIGHT - 1)) && isNotSolid(DIR_DOWN)) chad.location.y++;
+				if((warpID = isWarp())) warp(warpID);
 				break;
 			case KEY_LEFT:
 				setDirection(DIR_LEFT);
 				if((chad.location.x > 0) && isNotSolid(DIR_LEFT)) chad.location.x--;
+				if((warpID = isWarp())) warp(warpID);
 				break;
 			case KEY_RIGHT:
 				setDirection(DIR_RIGHT);
 				if((chad.location.x < (MAP_WIDTH - 1)) && isNotSolid(DIR_RIGHT)) chad.location.x++;
+				if((warpID = isWarp())) warp(warpID);
 				break;
 			case 0x9: // TAB
 				menuUp = TRUE;
@@ -215,6 +279,11 @@ void setMap(int newMapNumber, int xEntry, int yEntry, int entryDirection)
 	chad.location.y = yEntry;
 }
 
+void warp(warpID)
+{
+	setMap(warpTable[warpID - 900][1], warpTable[warpID - 900][2], warpTable[warpID - 900][3], warpTable[warpID - 900][4]);
+}
+
 bool isNotSolid(int attemptDir)
 {
 	switch(attemptDir)
@@ -251,4 +320,24 @@ bool isNotSolid(int attemptDir)
 		default:
 			break;
 	}
+}
+
+int isWarp()
+{
+	int propToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x];
+	if(startsWith(9, propToCheck))
+	{
+		return propToCheck;
+	} else return 0;
+}
+
+bool startsWith(int digit, int numToCheck)
+{
+	numToCheck = abs(numToCheck);
+	while(numToCheck >= 10)
+	{
+		numToCheck /= 10;
+	}
+	if(numToCheck == digit) return TRUE;
+	else return FALSE;
 }
