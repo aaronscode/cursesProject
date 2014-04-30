@@ -170,7 +170,6 @@ void loadMaps(Map* mp)
 	}
 
 		fclose(fp);
-		free(fp);
 		fp = NULL;
 	}
 

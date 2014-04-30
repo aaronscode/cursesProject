@@ -90,13 +90,6 @@ void initialize()
 	noecho(); // turn off key echoing
 	keypad(w, TRUE); // allow getch() to detect non-character key presses
 
-
-	// set the correct size for linux terminals
-	if(is_unix)
-	{
-		resizeterm(25, 80);
-	}
-
 	curs_set(0); // hide the cursor
 
 	initMenu(4);
