@@ -5,8 +5,8 @@
  *
  * Credits: 
  * Programming - Aaron Gross
- * Story/Comic relief - Jason Pepper, Jack Hafer
- * Maps - Jason Pepper
+ * Level design, story & dialogue, director of creativity - Jason Pepper
+ * Comic relief - Jack Hafer
  * 3/4/14
  * V 0.2
  * =============================================================================
