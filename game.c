@@ -99,7 +99,6 @@ void loadWarpTable()
 		}
 	}
 	fclose(warpFile);
-	free(warpFile);
 	warpFile = NULL;
 	
 }
