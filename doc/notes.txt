@@ -100,3 +100,54 @@ int facing
 	1 - [D]own
 	2 - [L]eft
 	3 - [R]ight
+
+==========================================
+= Problems That Arose                    =
+==========================================
+
+1. When I was first thinking about this project, I was gonna try to use OpenGl
+to make a game. As it turns out, it's hella difficult (yo) to get OpenGL
+working in genenral, let alone on windows, unix and mac all at the same time.
+Simply put, it was too much for me to worry about learning OpenGL and making a
+game at the same time. So I switched over to curses.
+
+2. Curses is a library that lets you do cool things with the terminal, like
+format stuff nicely, and use colors. The current implementations of the curses
+library are pdCurses for windows, and ncurses for linux. It was super easy to
+get ncurses set up, but pdcurses took a little bit more work. It wasn't all
+that difficult to be honest, it was just less straightforward.
+
+3. ScreenSize - This game runs in a 80 X 25 character termial. On windows,
+this is not an issue, the defalt termial size is 80 X 25, and you can't really
+change that. On linux, however, the user can resize the terminal to their
+heart's content. I tried to use several functions from the curses library to
+automatically resize the window, but everything I tried caused an immediate
+crash, on both Linux and Windows. As a solution, I included a screen test in
+the options menu, where a box is drawn on very edges of the screen. This
+allows linux users to manually rezise their termial until the entire box fits.
+This isn't a perfect solution, but it works.
+
+3. Colors and characters- I'm trying to make a game that works on both Windows
+and Linux (and maybe one day, Mac), which means that it should be able to
+easily complile and run on both those platforms without having to really
+change the source code. Remember those colors I mentioned earlier? It turns
+out different systems support more colors than others. Specificially, Windows
+supports more colors on the terminal than Linux, so I had to figure out the
+maximum number of colors I could get on both termials, which ended u being 8
+different colors in 64 different combinations of backround and foreground
+color. Also, linux and windows both support two different extended character
+sets. Ncurses implements one, and pdcurses implements another. The two are
+not compatible, so I had to limit the characters used to the standard ASCII
+character set.
+
+4. Memory leaks. I had a few. One was a segmentation fault that caused my
+program to crash every time it exited. Which wasn't terrible, because it
+finished by the time it crashed. It wasn't good either, though. So, I
+downloaded valgrind, and started looking at my program's memeory usage. I had
+a feeling it had something to do with my maps, for which there was a rather
+large memory allocation. As it turns out, i was trying to de-allocate a
+pointer twice, which caused the error. I also found a case where I had a
+pointer to a pointer, and I was allocating memory on both levels of pointers.
+I figured you could just free the pointer to the pointer, and it would take
+care of them all, but you have to free the sub-pointers as well, or memory is
+leaked.

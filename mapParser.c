@@ -60,12 +60,12 @@ void loadMaps(Map* mp)
 		char chFromFile;
 		char digitList[6];
 		fp = fopen(mapFilePath, "r");
-		addch(getc(fp));
-		addch(getc(fp));
+		getc(fp);
+		getc(fp);
 		fgets(mp[l].mapDesc, 79, fp);
 		stripNewline(mp[l].mapDesc);
-		addch(getc(fp));
-		addch(getc(fp));
+		getc(fp);
+		getc(fp);
 
 		// parse character data
 		for(i = 0; i < MAP_HEIGHT; i++)
@@ -100,8 +100,8 @@ void loadMaps(Map* mp)
 			}
 		}
 
-	addch(getc(fp));
-	addch(getc(fp));
+	getc(fp);
+	getc(fp);
 	for(i = 0; i < MAP_HEIGHT; i++)
 	{
 		for(j = 0; j < MAP_WIDTH; j++)
@@ -134,9 +134,9 @@ void loadMaps(Map* mp)
 		}
 	}
 
-	// parse property date
-	addch(getc(fp));
-	addch(getc(fp));
+	// parse property data
+	getc(fp);
+	getc(fp);
 	for(i = 0; i < MAP_HEIGHT; i++)
 	{
 		for(j = 0; j < MAP_WIDTH; j++)
