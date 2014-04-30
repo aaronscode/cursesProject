@@ -139,6 +139,7 @@ void cleanup()
 	cleanupGame();
 	clear();
 	refresh();
+	delwin(w);
     	endwin();
 }
 

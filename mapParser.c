@@ -34,7 +34,7 @@ void readMapList()
 		fgets(mapNames[i], 79, fp);
 		stripNewline(mapNames[i]);
 	}
-	free(fp);
+	fclose(fp);
 	fp = NULL;
 }
 
