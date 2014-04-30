@@ -98,6 +98,7 @@ void loadWarpTable()
 			}while(!timeForNext);
 		}
 	}
+	fclose(warpFile);
 	free(warpFile);
 	warpFile = NULL;
 	
