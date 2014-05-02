@@ -2,12 +2,15 @@
 #define __SPANKGAME_H__
 
 #include <math.h>
+#include <unistd.h> // access() - check for savefile
 #include "definitions.h"
 #include "state.h"
 #include "mapParser.h"
 #include "hero.h"
 
 #define MAX_NUM_WARPS 10
+
+#define SAVE_FILE_NAME "save.txt"
 
 #define DIR_UP 0
 #define DIR_DOWN 1
@@ -19,6 +22,7 @@ void loadWarpTable();
 void initChad();
 void updateGame(int key);
 void renderGame();
+void saveGame();
 void cleanupGame();
 
 void setDirection(int newDirection);

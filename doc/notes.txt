@@ -103,6 +103,16 @@ in order, but where the warps are doesn't have to be the order in which the
 player inevitably accesses them. 
 
 =========================================
+= Savefile definition                   =
+=========================================
+experience\n
+map#\n
+x\n
+y\n
+direction\n
+(more to come)
+
+=========================================
 = Game.h                                =
 =========================================
 (NOT USED ANYMORE) GameState Id's:
