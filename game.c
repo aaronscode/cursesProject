@@ -14,6 +14,7 @@ int warpTable[MAX_NUM_WARPS][5];
 int warpID;
 
 hero chad;
+FILE *savePtr;
 
 bool menuUp = FALSE; // if the pause menu is currently displayed or not
 int menuPosition = 0; // the position of the currently selected menu option
@@ -109,14 +110,34 @@ void loadWarpTable()
  */
 void initChad()
 {
-	//TODO loadsavefile, if it exists, to set all these values
-	chad.experience = 0;
-	chad.level = pow((double) chad.experience * 5 / 4, 1/3);
-	chad.attack = 0;
-	chad.defence = 0;
-	chad.hp = 0; 
-	chad.speed = 0;
-	setMap(warpTable[0][1], warpTable[0][2], warpTable[0][3], warpTable[0][4]);
+	if(access( SAVE_FILE_NAME, F_OK ) != -1) // if savefile exits
+	{
+		int temp;
+		savePtr = fopen(SAVE_FILE_NAME, "r");
+		fscanf(savePtr, "%d", &temp); // read experience
+		chad.experience = temp;
+		fscanf(savePtr, "%d", &temp); // read map number
+		chad.location.mapNum = temp;
+		fscanf(savePtr, "%d", &temp); // read x position
+		chad.location.x = temp;
+		fscanf(savePtr, "%d", &temp); // read y position
+		chad.location.y = temp;
+		fscanf(savePtr, "%d", &temp); // read direction
+		setDirection(temp);
+		// will load inventory and shit later
+		fclose(savePtr);
+		savePtr = NULL;
+	} else { // file does not exist, start with defaults
+		chad.experience = 0;
+		chad.level = calcLevel(chad.experience);
+		chad.attack = calcAttack(chad.level);
+		chad.defence = calcDefense(chad.level);
+		chad.hp = calcHP(chad.level); 
+		chad.speed = calcSpeed(chad.level);
+		setMap(warpTable[0][1], warpTable[0][2], warpTable[0][3], warpTable[0][4]);
+	}
+	// move this shit into else later, when you actually load inventory
+	// TODO set initial inventory to be later moved under else statement	
 }
 
 /***************************** updateGame() ************************
@@ -148,6 +169,9 @@ void updateGame(int key)
 				setDirection(DIR_RIGHT);
 				if((chad.location.x < (MAP_WIDTH - 1)) && isNotSolid(DIR_RIGHT)) chad.location.x++;
 				if((warpID = isWarp())) warp(warpID);
+				break;
+			case KEY_F(1):
+				saveGame();
 				break;
 			case 0x9: // TAB
 				menuUp = TRUE;
@@ -243,6 +267,19 @@ void renderGame()
 		mvprintw(topRowOfMenu + i + 1, 73, "O-----O");
 		mvprintw(topRowOfMenu + menuPosition + 1, 74, ">");
 	}
+}
+
+void saveGame()
+{
+	savePtr = fopen(SAVE_FILE_NAME, "w+");
+	fprintf(savePtr, "%d\n", chad.experience);
+	fprintf(savePtr, "%d\n", chad.location.mapNum);
+	fprintf(savePtr, "%d\n", chad.location.x);
+	fprintf(savePtr, "%d\n", chad.location.y);
+	fprintf(savePtr, "%d\n", chad.facing);
+	// TODO save inventory
+	fclose(savePtr);
+	savePtr = NULL;
 }
 
 void cleanupGame()

@@ -21,7 +21,7 @@
 
 void initialize();
 void render();
-void pause();
+void gamePause();
 void cleanup();
 
 bool notReadyToQuit();
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	{
 		update();
 		render();
-		pause();
+		gamePause();
 
 		tick++;
 		if(tick == TICS_PER_SEC)
@@ -127,7 +127,7 @@ void render()
 	refresh(); // call curses's refresh funct to update screen
 }
 
-void pause() 
+void gamePause() 
 {
 	napms(DELAY); // from curses.h, sleeps for n milliseconds
 }

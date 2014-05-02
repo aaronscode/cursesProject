@@ -27,4 +27,12 @@ typedef struct hero
 	item inventory[MAX_INV_SIZE];
 } hero;
 
+int calcLevel(int experience);
+int calcAttack(int level);
+int calcDefense(int level);
+int calcHP(int level);
+int calcSpeed(int level);
+
+#include "hero.c"
+
 #endif
