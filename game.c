@@ -17,6 +17,7 @@ hero chad;
 FILE *savePtr;
 
 bool menuUp = FALSE; // if the pause menu is currently displayed or not
+bool gameJustSaved = FALSE;
 int menuPosition = 0; // the position of the currently selected menu option
 int numMenuChoices = 5;
 char pauseMenuChoices[][5] = {"Inv", "Save", "Opt", "Inst", "Exit"};
@@ -46,6 +47,7 @@ void initGame()
 	napms(2000);
 	*/
 	loadWarpTable();
+	loadDialogues();
 
 	initChad();
 }
@@ -146,7 +148,11 @@ void initChad()
  */
 void updateGame(int key)
 {
-	if(!menuUp)
+	if((key != ERR) && (gameJustSaved == TRUE))
+	{
+		gameJustSaved = FALSE;
+	}
+	if(!menuUp && !dialogueUp)
 	{
 		switch(key)
 		{
@@ -170,9 +176,41 @@ void updateGame(int key)
 				if((chad.location.x < (MAP_WIDTH - 1)) && isNotSolid(DIR_RIGHT)) chad.location.x++;
 				if((warpID = isWarp())) warp(warpID);
 				break;
+			case 'z':
+				switch(chad.facing)
+				{
+					int tileToCheck;
+					case DIR_UP: tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y - 1][chad.location.x];
+						if(startsWith(NPC_TILE, tileToCheck))
+						{
+							setDialogue(tileToCheck - 200);
+						}
+						break;
+					case DIR_DOWN: tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y + 1][chad.location.x];
+						if(startsWith(NPC_TILE, tileToCheck))
+						{
+							setDialogue(tileToCheck - 200);
+						}
+						break;
+					case DIR_LEFT: tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x - 1];
+						if(startsWith(NPC_TILE, tileToCheck))
+						{
+							setDialogue(tileToCheck - 200);
+						}
+						break;
+					case DIR_RIGHT: tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x + 1];
+						if(startsWith(NPC_TILE, tileToCheck))
+						{
+							setDialogue(tileToCheck - 200);
+						}
+						break;
+				}
+				break;
+			/*
 			case KEY_F(1):
 				saveGame();
 				break;
+			*/
 			case 0x9: // TAB
 				menuUp = TRUE;
 				break;
@@ -182,7 +220,7 @@ void updateGame(int key)
 			default:
 				break;
 		}
-	} else {
+	} else if(menuUp){
 		switch(key)
 		{
 			case KEY_UP:
@@ -197,6 +235,9 @@ void updateGame(int key)
 					case 0: // Inventory
 						break;
 					case 1: // Save
+						saveGame();
+						gameJustSaved = TRUE;
+						menuUp = FALSE;
 						break;
 					case 2: // Options
 						setState(OPTIONS);
@@ -209,15 +250,17 @@ void updateGame(int key)
 						break;
 				}
 				break;
+			case 27: // Escape
 			case 'x':
-				menuUp = FALSE;
-				break;
 			case 0x9: // TAB
 				menuUp = FALSE;
 				break;
 			default:
 				break;
 		}
+	} else if(dialogueUp)
+	{
+		updateDialogue(key);
 	}
 }
 
@@ -261,11 +304,21 @@ void renderGame()
 		for(i = 0; i < numMenuChoices; i++)
 		{
 			mvprintw(topRowOfMenu + i + 1, 73, "|");
+			mvprintw(topRowOfMenu + i + 1, 74, "      ");
 			mvprintw(topRowOfMenu + i + 1, 75, "%s", pauseMenuChoices[i]);
 			mvprintw(topRowOfMenu + i + 1, 79, "|");
 		}
 		mvprintw(topRowOfMenu + i + 1, 73, "O-----O");
 		mvprintw(topRowOfMenu + menuPosition + 1, 74, ">");
+	}else if(dialogueUp)
+	{
+		renderDialogue();
+	}
+	else if(gameJustSaved)
+	{
+		mvprintw(11, 33, "O----------0");
+		mvprintw(12, 33, "|Game Saved|");
+		mvprintw(13, 33, "O----------0");
 	}
 }
 
@@ -328,28 +381,28 @@ bool isNotSolid(int attemptDir)
 		int tileToCheck;
 		case DIR_UP:
 			tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y - 1][chad.location.x];
-			if((tileToCheck == SOLID_TILE) || (tileToCheck == NPC_TILE))
+			if((tileToCheck == SOLID_TILE) || (startsWith(NPC_TILE, tileToCheck)))
 			{
 				return FALSE;
 			} else return TRUE;
 			break;
 		case DIR_DOWN:
 			tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y + 1][chad.location.x];
-			if((tileToCheck == SOLID_TILE) || (tileToCheck == NPC_TILE))
+			if((tileToCheck == SOLID_TILE) || (startsWith(NPC_TILE, tileToCheck)))
 			{
 				return FALSE;
 			} else return TRUE;
 			break;
 		case DIR_LEFT:
 			tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x - 1];
-			if((tileToCheck == SOLID_TILE) || (tileToCheck == NPC_TILE))
+			if((tileToCheck == SOLID_TILE) || (startsWith(NPC_TILE, tileToCheck)))
 			{
 				return FALSE;
 			} else return TRUE;
 			break;
 		case DIR_RIGHT:
 			tileToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x + 1];
-			if((tileToCheck == SOLID_TILE) || (tileToCheck == NPC_TILE))
+			if((tileToCheck == SOLID_TILE) || (startsWith(NPC_TILE, tileToCheck)))
 			{
 				return FALSE;
 			} else return TRUE;

@@ -18,6 +18,7 @@ typedef struct hero
 	int experience;
 	int level;
 	int attack, defence, hp, speed;
+	int money;
 	
 	int facing;
 	int characterIcon;
@@ -25,6 +26,7 @@ typedef struct hero
 	position location;
 
 	item inventory[MAX_INV_SIZE];
+	item weapon, armour; // equiped weapon and armour
 } hero;
 
 int calcLevel(int experience);

@@ -7,6 +7,7 @@
 #include "state.h"
 #include "mapParser.h"
 #include "hero.h"
+#include "dialogue.h"
 
 #define MAX_NUM_WARPS 10
 

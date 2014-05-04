@@ -14,8 +14,8 @@ Well, I can't really argue with you. It is a terrible name. But, that's just\n\
 the way it is, so try to deal with it.\n\n\
 Anyway, Chad, erm, I mean YOU (remember, you ARE the Chad), work in the local\n\
 Amazon warehouse, stacking boxes, taking inventory, etc. That is, you did until\n\
-one day, when you hear a noise in the back of the warehouse. You head back to\n\
-investigate..."
+one day, when a co-woker informs you that your boss, Sigmeund Freud wants to\n\
+have a word with you. You head to his office to see what's up..."
 };
 char instructionsText2[] = {"\
 Page 2: Controls\n\
