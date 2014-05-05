@@ -8,7 +8,7 @@
  * Level design, story & dialogue, director of creativity - Jason Pepper
  * Comic relief - Jack Hafer
  * 3/4/14
- * V 0.2
+ * V1.0 
  * =============================================================================
  */
 
