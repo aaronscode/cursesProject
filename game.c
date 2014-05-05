@@ -13,14 +13,16 @@ int mapXIndex, mapYIndex;
 int warpTable[MAX_NUM_WARPS][5];
 int warpID;
 
-hero chad;
+int randNum;
+//bool encounterTile;
+
 FILE *savePtr;
 
 bool menuUp = FALSE; // if the pause menu is currently displayed or not
 bool gameJustSaved = FALSE;
 int menuPosition = 0; // the position of the currently selected menu option
-int numMenuChoices = 5;
-char pauseMenuChoices[][5] = {"Inv", "Save", "Opt", "Inst", "Exit"};
+int numMenuChoices = 6;
+char pauseMenuChoices[][5] = {"Inv", "Stat", "Save", "Opt", "Inst", "Exit"};
 
 /************************ initGame() ***********************
  *
@@ -48,6 +50,8 @@ void initGame()
 	*/
 	loadWarpTable();
 	loadDialogues();
+	// seed the RNG
+	srand(time(NULL));
 
 	initChad();
 }
@@ -118,6 +122,13 @@ void initChad()
 		savePtr = fopen(SAVE_FILE_NAME, "r");
 		fscanf(savePtr, "%d", &temp); // read experience
 		chad.experience = temp;
+		chad.level = calcLevel(chad.experience);
+		chad.attack = calcAttack(chad.level);
+		chad.defense = calcDefense(chad.level);
+		chad.maxhp = calcHP(chad.level);
+		chad.speed = calcSpeed(chad.level);
+		fscanf(savePtr, "%d", &temp); // read hp
+		chad.hp = temp;
 		fscanf(savePtr, "%d", &temp); // read map number
 		chad.location.mapNum = temp;
 		fscanf(savePtr, "%d", &temp); // read x position
@@ -129,12 +140,14 @@ void initChad()
 		// will load inventory and shit later
 		fclose(savePtr);
 		savePtr = NULL;
-	} else { // file does not exist, start with defaults
+	}
+	else
+	{ // file does not exist, start with defaults
 		chad.experience = 0;
 		chad.level = calcLevel(chad.experience);
 		chad.attack = calcAttack(chad.level);
-		chad.defence = calcDefense(chad.level);
-		chad.hp = calcHP(chad.level); 
+		chad.defense = calcDefense(chad.level);
+		chad.maxhp = chad.hp = calcHP(chad.level); 
 		chad.speed = calcSpeed(chad.level);
 		setMap(warpTable[0][1], warpTable[0][2], warpTable[0][3], warpTable[0][4]);
 	}
@@ -160,21 +173,25 @@ void updateGame(int key)
 				setDirection(DIR_UP);
 				if((chad.location.y > 0) && isNotSolid(DIR_UP)) chad.location.y--;
 				if((warpID = isWarp())) warp(warpID);
+				if(isRandEncounterTile()) rollTheDice();
 				break;
 			case KEY_DOWN:
 				setDirection(DIR_DOWN);
 				if((chad.location.y <  (MAP_HEIGHT - 1)) && isNotSolid(DIR_DOWN)) chad.location.y++;
 				if((warpID = isWarp())) warp(warpID);
+				if(isRandEncounterTile()) rollTheDice();
 				break;
 			case KEY_LEFT:
 				setDirection(DIR_LEFT);
 				if((chad.location.x > 0) && isNotSolid(DIR_LEFT)) chad.location.x--;
 				if((warpID = isWarp())) warp(warpID);
+				if(isRandEncounterTile()) rollTheDice();
 				break;
 			case KEY_RIGHT:
 				setDirection(DIR_RIGHT);
 				if((chad.location.x < (MAP_WIDTH - 1)) && isNotSolid(DIR_RIGHT)) chad.location.x++;
 				if((warpID = isWarp())) warp(warpID);
+				if(isRandEncounterTile()) rollTheDice();
 				break;
 			case 'z':
 				switch(chad.facing)
@@ -234,18 +251,21 @@ void updateGame(int key)
 				{
 					case 0: // Inventory
 						break;
-					case 1: // Save
+					case 1: // status
+						setState(STATUS);
+						break;
+					case 2: // Save
 						saveGame();
 						gameJustSaved = TRUE;
 						menuUp = FALSE;
 						break;
-					case 2: // Options
+					case 3: // Options
 						setState(OPTIONS);
 						break;
-					case 3: // Instructions
+					case 4: // Instructions
 						setState(INSTRUCTIONS);
 						break;
-					case 4: // Exit
+					case 5: // Exit
 						menuUp = FALSE;
 						break;
 				}
@@ -293,9 +313,13 @@ void renderGame()
 	mvprintw(24, 5, "|y:%d", chad.location.y);
 	printw(" %c", maps[chad.location.mapNum].mapTiles[chad.location.y][chad.location.x]);
 	*/
+	// debug for random encounter system
+	//mvprintw(24, 0, "%d, %d, %d", randNum, encounterTile, isRandEncounterTile());
+	mvprintw(24,0, "%d", calcLevel(chad.experience));
 
 	mvaddch(yCenter, xCenter, chad.characterIcon);
 
+	// render menu if necessary
 	if(menuUp)
 	{
 		int topRowOfMenu = ((SCREEN_HEIGHT/2) - (numMenuChoices + 1));
@@ -316,9 +340,9 @@ void renderGame()
 	}
 	else if(gameJustSaved)
 	{
-		mvprintw(11, 33, "O----------0");
+		mvprintw(11, 33, "O----------O");
 		mvprintw(12, 33, "|Game Saved|");
-		mvprintw(13, 33, "O----------0");
+		mvprintw(13, 33, "O----------O");
 	}
 }
 
@@ -326,6 +350,7 @@ void saveGame()
 {
 	savePtr = fopen(SAVE_FILE_NAME, "w+");
 	fprintf(savePtr, "%d\n", chad.experience);
+	fprintf(savePtr, "%d\n", chad.hp);
 	fprintf(savePtr, "%d\n", chad.location.mapNum);
 	fprintf(savePtr, "%d\n", chad.location.x);
 	fprintf(savePtr, "%d\n", chad.location.y);
@@ -372,6 +397,18 @@ void setMap(int newMapNumber, int xEntry, int yEntry, int entryDirection)
 void warp(warpID)
 {
 	setMap(warpTable[warpID - 900][1], warpTable[warpID - 900][2], warpTable[warpID - 900][3], warpTable[warpID - 900][4]);
+}
+
+void rollTheDice()
+{
+	// generate a random number between 1 and 10
+	randNum = (int) rand() % 10 + 1;
+	if(randNum == 4)// http://xkcd.com/221/
+	{
+		initBattle();
+		setState(BATTLE);
+		napms(400); // give the user a sec to realize battle is happening
+	}
 }
 
 bool isNotSolid(int attemptDir)
@@ -429,5 +466,12 @@ bool startsWith(int digit, int numToCheck)
 		numToCheck /= 10;
 	}
 	if(numToCheck == digit) return TRUE;
+	else return FALSE;
+}
+
+bool isRandEncounterTile()
+{
+	int propToCheck = maps[chad.location.mapNum].mapProperties[chad.location.y][chad.location.x];
+	if(startsWith(3, propToCheck)) return TRUE;
 	else return FALSE;
 }

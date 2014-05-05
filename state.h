@@ -9,7 +9,7 @@
 #define BATTLE 5
 #define SHOP 6
 #define INVENTORY 7
-#define NAMING 8
+#define STATUS 8
 
 int getState();
 int getPrevState();

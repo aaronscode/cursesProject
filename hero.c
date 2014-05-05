@@ -1,6 +1,6 @@
 int calcLevel(int experience)
 {
-	return pow((double) experience * 5 / 4, 1/3);
+	return (int)(experience / 30);
 }
 
 int calcAttack(int level)
@@ -15,7 +15,7 @@ int calcDefense(int level)
 
 int calcHP(int level)
 {
-	return 20 + 3*level;
+	return 20 + 3 * level;
 }
 
 int calcSpeed(int level)

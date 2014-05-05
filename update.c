@@ -23,11 +23,17 @@ void update() {
 			case GAME:
 				updateGame(key);
 				break;
+			case BATTLE:
+				updateBattle(key);
+				break;
 			case INSTRUCTIONS:
 				updateInstructions(key);
 				break;
 			case OPTIONS:
 				updateOptions(key);
+				break;
+			case STATUS:
+				updateStatus(key);
 				break;
 			default:
 				break;

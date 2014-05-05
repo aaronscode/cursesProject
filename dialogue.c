@@ -13,6 +13,12 @@ void loadDialogues()
 	strcpy(dialogues[0].dialogueText[3], "YOUR AUTHORITY IS NOT RECOGNIZED IN FORT KICKASS! 3");
 	strcpy(dialogues[0].dialogueText[4], "YOUR AUTHORITY IS NOT RECOGNIZED IN FORT KICKASS! 4");
 
+	dialogues[1].numLines = 1;
+	strcpy(dialogues[1].dialogueText[0], "Look, Scully! Aliens!");
+	
+	dialogues[2].numLines = 1;
+	strcpy(dialogues[2].dialogueText[0], "Goddammit Mulder...");
+
 }
 
 void setDialogue(int dID)

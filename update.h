@@ -7,6 +7,7 @@
 #include "game.h"
 #include "instructions.h"
 #include "options.h"
+#include "status.h"
 
 int inputCoolCount;
 

@@ -1,6 +1,7 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
+#include <math.h>
 #include "item.h"
 
 #define MAX_INV_SIZE 40
@@ -17,7 +18,8 @@ typedef struct hero
 {
 	int experience;
 	int level;
-	int attack, defence, hp, speed;
+	int attack, defense, maxhp, speed;
+	int hp;
 	int money;
 	
 	int facing;

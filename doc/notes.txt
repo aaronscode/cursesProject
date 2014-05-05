@@ -106,6 +106,7 @@ player inevitably accesses them.
 = Savefile definition                   =
 =========================================
 experience\n
+hp\n
 map#\n
 x\n
 y\n

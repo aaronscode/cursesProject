@@ -1,6 +1,8 @@
 #ifndef __DEFINITIONS_H__
 #define __DEFINITIONS_H__
 
+#include "hero.h"
+
 #define MAX_FPS 50
 #define MSEC_IN_SEC 1000
 #define DELAY (MSEC_IN_SEC / MAX_FPS)
@@ -35,4 +37,6 @@ typedef struct Map{
 Map *maps;
 
 int numMaps;
+
+hero chad;
 #endif

@@ -18,6 +18,8 @@
 #include "state.h"
 #include "update.h"
 #include "mainMenu.h"
+#include "game.h"
+#include "battle.h"
 
 void initialize();
 void render();
@@ -115,11 +117,17 @@ void render()
 		case GAME:
 			renderGame();
 			break;
+		case BATTLE:
+			renderBattle();
+			break;
 		case INSTRUCTIONS:
 			renderInstructions();
 			break;
 		case OPTIONS:
 			renderOptions();
+			break;
+		case STATUS:
+			renderStatus();
 			break;
 		default:
 			break;

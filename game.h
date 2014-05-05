@@ -2,14 +2,16 @@
 #define __SPANKGAME_H__
 
 #include <math.h>
+#include <stdlib.h>
 #include <unistd.h> // access() - check for savefile
 #include "definitions.h"
 #include "state.h"
 #include "mapParser.h"
 #include "hero.h"
 #include "dialogue.h"
+#include "battle.h"
 
-#define MAX_NUM_WARPS 10
+#define MAX_NUM_WARPS 16
 
 #define SAVE_FILE_NAME "save.txt"
 
@@ -29,12 +31,14 @@ void cleanupGame();
 void setDirection(int newDirection);
 void setMap(int newNapNumber, int xEntry, int yEntry, int entryDirection);
 void warp(int warpID);
+void rollTheDice();
 
 // checks if tile in direction player is trying to move is solid
 bool isNotSolid(int attemptDir);
 int isWarp();
 // checks if a number begins with a specific digit
 bool startsWith(int digit, int numToCheck);
+bool isRandEncounterTile();
 
 #include "game.c"
 
