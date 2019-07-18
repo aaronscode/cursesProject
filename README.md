@@ -19,4 +19,4 @@ The hard way is to compile it yourself. I compiled it using MinGW gcc. You also 
 ##Credits
 Programming - Aaron G.
 
-Name, level design, story & dialogue, creativity - Jason P.
+Name, level design, story & dialogue, creativity - Mel P.
