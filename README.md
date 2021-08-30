@@ -21,21 +21,27 @@ The hard way is to compile it yourself. I compiled it using MinGW gcc. You also 
 
 ## Gallery
 Chicago, 1909
+
 ![Chicago, 1909](res/Chicago1909.png)
 
 Corn, of the Children. Definitely not the other way around
+
 ![Corn of the children](res/Corn.png)
 
 Colorado Springs
+
 ![Colorado Springs](res/ColoradoSprings.png)
 
 Nikola Tesla's pad
+
 ![Nikola Tesla's house](res/Tesla.png)
 
 The National Mall
+
 ![The National Mall](res/TheNationalMall.png)
 
 Portland
+
 ![Portland](res/Portland.png)
 
 Area 51
